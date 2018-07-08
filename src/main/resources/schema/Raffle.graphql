@@ -1,0 +1,77 @@
+# Base type for Raffles
+interface Raffle {
+  id: String
+  # name of the raffle
+  name: String
+  # type of the raffle
+  type: String
+  # How many winners this raffle has
+  noWinners: Int
+}
+
+# A Raffle that pick winners from a Twitter hashtag
+type TwitterRaffle implements Raffle {
+  id: String
+  # name of the raffle
+  name: String
+  # How many winners this raffle has
+  noWinners: Int
+  # type of the raffle
+  type: String
+  # When the raffle begins
+  since: String
+  # When the raffle ends
+  until: String
+  # Users Tweeting with this hashTag are eligible to win
+  hashTag: String
+}
+
+# A Raffle that pick winners from a list randomly
+type RandomListRaffle implements Raffle {
+  id: String
+  # name of the raffle
+  name: String
+  # How many winners this raffle has
+  noWinners: Int
+  # type of the raffle
+  type: String
+}
+
+type Winner {
+  id: String
+  name: String
+}
+
+type Event {
+  id: String
+  name: String
+  description: String
+}
+
+input SaveEventInput {
+  name: String!
+  description: String!
+}
+
+# All queries
+type Queries {
+  # list all raffles created by the current user
+  listAllRaffles(max: Int!, offset: Int!): [Raffle]
+
+  # list all events created by the current user
+  listAllEvents(max: Int!, offset: Int!): [Event]
+
+  # list all winners from a given raffle
+  pickWinners(raffleId: String): [Winner]
+}
+
+type Mutations {
+
+  # saves a new event. Returns the created event
+  saveEvent(event: SaveEventInput!): Event
+}
+
+schema {
+  query: Queries
+  mutation: Mutations
+}
