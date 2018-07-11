@@ -1,10 +1,13 @@
 package io.rafflethor.raffle.twitter
 
+import io.rafflethor.raffle.Raffle
 import io.rafflethor.raffle.RaffleWinner
 import io.rafflethor.raffle.test.Fixtures
 import spock.lang.Specification
 import twitter4j.Query
 import twitter4j.Twitter
+
+import spock.lang.Ignore
 
 /**
  * Checks the process of picking a list of winners from a twitter
@@ -14,6 +17,7 @@ import twitter4j.Twitter
  */
 class TwitterJudgeSpec extends Specification {
 
+    @Ignore
     void 'get list of winners'() {
         given: 'an instance of twitter api'
         Twitter twitter = Stub(Twitter) {

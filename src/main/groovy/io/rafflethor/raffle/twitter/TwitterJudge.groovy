@@ -40,9 +40,9 @@ class TwitterJudge implements Judge {
     List<RaffleWinner> pickWinners(Raffle raffle) {
         log.debug("picking ${raffle.noWinners} winners from raffle, ${raffle.id}")
 
-        Query hashTagQuery = new Query(raffle.hashTag)
-            .since(raffle.since.format(DATE_FORMAT))
-            .until(raffle.until.format(DATE_FORMAT))
+        Query hashTagQuery = new Query(raffle.payload.hashTag)
+            .since(raffle.payload.since.format(DATE_FORMAT))
+            .until(raffle.payload.until.format(DATE_FORMAT))
 
         return twitter
             .search(hashTagQuery)

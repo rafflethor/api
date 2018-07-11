@@ -4,6 +4,7 @@ import graphql.schema.DataFetchingEnvironment
 import org.pac4j.core.profile.UserProfile
 import ratpack.handling.Context
 import twitter4j.QueryResult
+import io.rafflethor.raffle.Raffle
 
 class Fixtures {
 
