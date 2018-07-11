@@ -14,7 +14,7 @@ branches:
 services:
   - docker
 script:
-  - ./gradlew build dockerPushImage -PdockerRegistryUsername=$DOCKER_REGISTRY_USERNAME -PdockerRegistryPassword=$DOCKER_REGISTRY_PASSWORD
+  - ./gradlew build publishApiImage -PdockerRegistryUsername=$DOCKER_REGISTRY_USERNAME -PdockerRegistryPassword=$DOCKER_REGISTRY_PASSWORD
 
 deploy:
   provider: script

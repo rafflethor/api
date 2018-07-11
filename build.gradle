@@ -13,8 +13,33 @@ apply plugin: "idea"
 apply plugin: "eclipse"
 apply plugin: "io.ratpack.ratpack-groovy"
 apply plugin: "com.github.johnrengelman.shadow"
+apply plugin: 'com.bmuschko.docker-java-application'
 
-apply from: 'gradle/docker.gradle'
+import com.bmuschko.gradle.docker.tasks.image.DockerPushImage
+import com.bmuschko.gradle.docker.DockerRegistryCredentials
+
+docker {
+
+    dockerDistTar {
+        environmentVariable('JAVA_OPTS', '-Djava.security.egd=file:/dev/./urandom')
+    }
+
+    javaApplication {
+        baseImage = 'openjdk:8-alpine'
+        ports = [5050]
+        tag = "rafflethor-docker-rafflethor.bintray.io/api:$version"
+    }
+}
+
+task publishApiImage(type: DockerPushImage) {
+    dependsOn dockerBuildImage
+
+    imageName = "rafflethor-docker-rafflethor.bintray.io/api:$version"
+    registryCredentials = new DockerRegistryCredentials(
+        username: System.getenv('DOCKER_REGISTRY_USERNAME'),
+        password: System.getenv('DOCKER_REGISTRY_PASSWORD')
+    )
+}
 
 repositories {
     jcenter()
