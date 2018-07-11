@@ -4,6 +4,12 @@ set -o errexit
 set -o nounset
 # set -o xtrace
 
+echo "Installing kubectl"
+
+wget -O kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/darwin/amd64/kubectl
+chmod +x ./kubectl
+sudo mv ./kubectl /usr/local/bin/kubectl
+
 echo $CA_CRT | base64 --decode -i > ${HOME}/ca.crt
 
 kubectl config set-cluster our-k8s-cluster --embed-certs=true --server=${CLUSTER_ENDPOINT} --certificate-authority=${HOME}/ca.crt
