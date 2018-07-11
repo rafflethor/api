@@ -12,7 +12,9 @@ kubectl config set-context travis --cluster=$CLUSTER_NAME --user=travis-echo --n
 kubectl config use-context travis
 kubectl config current-context
 
-kubectl apply -f ./k8s/deployment.yml
+kubectl get nodes
+
+#kubectl apply -f ./k8s/deployment.yml
 # kubectl apply -f ./k8s/service.yml
 # kubectl apply -f ./k8s/ingress.yml
 
