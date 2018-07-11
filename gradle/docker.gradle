@@ -1,0 +1,18 @@
+apply plugin: 'com.bmuschko.docker-java-application'
+
+docker {
+    registryCredentials {
+        username = "${properties.dockerRegistryUsername}"
+        password = "${properties.dockerRegistryPassword}"
+    }
+
+    dockerDistTar {
+        environmentVariable('JAVA_OPTS', '-Djava.security.egd=file:/dev/./urandom')
+    }
+
+    javaApplication {
+        baseImage = 'openjdk:8-alpine'
+        ports = [5050]
+        tag = "rafflethor-docker-rafflethor.bintray.io/api:$version"
+    }
+}

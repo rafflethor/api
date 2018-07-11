@@ -1,0 +1,23 @@
+language: groovy
+jdk:
+  - oraclejdk8
+before_cache:
+  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+cache:
+  directories:
+    - "$HOME/.gradle/caches/"
+    - "$HOME/.gradle/wrapper/"
+sudo: required
+branches:
+  only:
+    - master
+services:
+  - docker
+script:
+  - ./gradlew build dockerPushImage -PdockerRegistryUsername=$DOCKER_REGISTRY_USERNAME -PdockerRegistryPassword=$DOCKER_REGISTRY_PASSWORD
+
+deploy:
+  provider: script
+  script: ci/deploy.sh
+  on:
+    branch: master
