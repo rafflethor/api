@@ -1,23 +1,39 @@
 #!/usr/bin/env bash
+
 set -o pipefail
 set -o errexit
 set -o nounset
-# set -o xtrace
 
-echo $CA_CRT | base64 --decode -i > ${HOME}/ca.crt
+# DESCRIPTION
+# ===========
+#
+# This script can be used to apply a deployment to k8s using any
+# continuous integration environment.
+#
+# - K8S_CA_CRT: Host certificate
+# - K8S_USER_TOKEN: ServiceAccount token
+# - K8S_CLUSTER_NAME: Cluster name
+# - K8S_HOST: Address name of the K8s cluster
+# - K8S_CONTEXT_NAME: Namespace and context name
+#
+# Once the credentials have been set then we can apply the deployment,
+# pods, services...etc yaml files
+#
+# Finally the scripts deletes the server certificate
 
-kubectl config set-cluster ${CLUSTER_NAME} --embed-certs=true --server=${CLUSTER_ENDPOINT} --certificate-authority=${HOME}/ca.crt
-kubectl config set-credentials travis-echo --token=$USER_TOKEN
-kubectl config set-context travis --cluster=$CLUSTER_NAME --user=travis-echo --namespace=rafflethor
-kubectl config use-context travis
-kubectl config current-context
+echo $K8S_CA_CRT | base64 --decode -i > ${HOME}/ca.crt
+K8S_USER_TOKEN=$(echo $K8S_USER_TOKEN | base64 -d)
 
-kubectl get pods --all-namespaces
+# SET-CREDENTIALS
+kubectl config set-cluster ${K8S_CLUSTER_NAME} --embed-certs=true --server=${K8S_HOST} --certificate-authority=${HOME}/ca.crt
+kubectl config set-credentials ${K8_USERNAME} --token=${K8S_USER_TOKEN}
+kubectl config set-context ${K8_CONTEXT_NAME} --cluster=${K8S_CLUSTER_NAME} --user=${K8_USERNAME}
+kubectl config use-context ${K8_CONTEXT_NAME}
 
-# kubectl apply -f ./k8s/deployment.yml
-# kubectl apply -f ./k8s/service.yml
-# kubectl apply -f ./k8s/ingress.yml
+# DEPLOYMENT
+kubectl get deployments --namespace=$K8S_CONTEXT_NAME
 
+# CLEANING-UP
 function cleanup {
     printf "Cleaning up...\n"
     rm -vf "${HOME}/ca.crt"
