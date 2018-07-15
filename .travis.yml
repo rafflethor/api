@@ -23,7 +23,6 @@ branches:
     - master
 
 script:
-  - kubectl version
   - ./gradlew build publishApiImage -PdockerRegistryUsername=$DOCKER_REGISTRY_USERNAME -PdockerRegistryPassword=$DOCKER_REGISTRY_PASSWORD
 
 deploy:
