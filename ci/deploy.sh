@@ -28,8 +28,8 @@ K8S_USER_TOKEN=$(echo $K8S_USER_TOKEN | base64 -d)
 # SET-CREDENTIALS
 kubectl config set-cluster ${K8S_CLUSTER_NAME} --embed-certs=true --server=${K8S_HOST} --certificate-authority=${HOME}/ca.crt
 kubectl config set-credentials ${K8S_USERNAME} --token=${K8S_USER_TOKEN}
-kubectl config set-context ${K8_CONTEXT_NAME} --cluster=${K8S_CLUSTER_NAME} --user=${K8S_USERNAME}
-kubectl config use-context ${K8_CONTEXT_NAME}
+kubectl config set-context ${K8S_CONTEXT_NAME} --cluster=${K8S_CLUSTER_NAME} --user=${K8S_USERNAME}
+kubectl config use-context ${K8S_CONTEXT_NAME}
 
 # DEPLOYMENT
 kubectl get deployments --namespace=$K8S_CONTEXT_NAME
