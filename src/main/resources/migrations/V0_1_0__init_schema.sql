@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS events (
+CREATE TABLE IF NOT EXISTS organizations (
   id UUID NOT NULL PRIMARY KEY,
   name VARCHAR(255),
   description text,
@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS raffles (
   noWinners INT,
   type varchar(255),
   payload json,
-  eventId UUID,
+  organizationId UUID,
   since timestamp,
   until timestamp,
   createdAt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP

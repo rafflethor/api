@@ -6,7 +6,7 @@ import groovy.util.logging.Slf4j
 
 import io.rafflethor.raffle.Judge
 import io.rafflethor.raffle.Raffle
-import io.rafflethor.raffle.RaffleWinner
+import io.rafflethor.raffle.Winner
 import twitter4j.Query
 import twitter4j.Status
 import twitter4j.Twitter
@@ -37,7 +37,7 @@ class TwitterJudge implements Judge {
     Twitter twitter
 
     @Override
-    List<RaffleWinner> pickWinners(Raffle raffle) {
+    List<Winner> pickWinners(Raffle raffle) {
         log.debug("picking ${raffle.noWinners} winners from raffle, ${raffle.id}")
 
         Query hashTagQuery = new Query(raffle.payload.hashTag)
@@ -47,15 +47,15 @@ class TwitterJudge implements Judge {
         return twitter
             .search(hashTagQuery)
             .tweets
-            .collect(toRaffleWinner(raffle))
+            .collect(toWinner(raffle))
             .take(raffle.noWinners)
     }
 
-    private static Closure<RaffleWinner> toRaffleWinner(Raffle raffle) {
+    private static Closure<Winner> toWinner(Raffle raffle) {
         return { Status status ->
             User user = status.user
 
-            return new RaffleWinner(id: user.screenName, name: user.name, when: LocalDate.now(), raffle: raffle)
-        } as Closure<RaffleWinner>
+            return new Winner(id: user.screenName, name: user.name, when: LocalDate.now(), raffle: raffle)
+        } as Closure<Winner>
     }
 }

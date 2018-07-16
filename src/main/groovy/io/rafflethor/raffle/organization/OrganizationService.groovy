@@ -1,4 +1,4 @@
-package io.rafflethor.event
+package io.rafflethor.raffle.organization
 
 import javax.inject.Inject
 import java.util.concurrent.CompletableFuture
@@ -6,12 +6,12 @@ import java.util.concurrent.CompletableFuture
 import graphql.schema.DataFetchingEnvironment
 import gql.ratpack.exec.Futures
 
-class EventService {
+class OrganizationService {
 
     @Inject
-    EventRepository eventRepository
+    OrganizationRepository eventRepository
 
-    CompletableFuture<List<Event>> listAll(DataFetchingEnvironment env) {
+    CompletableFuture<List<Organization>> listAll(DataFetchingEnvironment env) {
         Integer max = env.arguments.max as Integer
         Integer offset = env.arguments.offset as Integer
 
@@ -20,8 +20,8 @@ class EventService {
         }
     }
 
-    CompletableFuture<Event> save(DataFetchingEnvironment env) {
-        Event event = new Event(env.arguments.event.subMap(EventRepository.FIELDS))
+    CompletableFuture<Organization> save(DataFetchingEnvironment env) {
+        Organization event = new Organization(env.arguments.event.subMap(OrganizationRepository.FIELDS))
 
         return Futures.blocking {
             return eventRepository.save(event)

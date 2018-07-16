@@ -15,5 +15,5 @@ interface Judge {
      * @return a list of winners
      * @since 0.1.0
      */
-    List<RaffleWinner> pickWinners(Raffle raffle)
+    List<Winner> pickWinners(Raffle raffle)
 }

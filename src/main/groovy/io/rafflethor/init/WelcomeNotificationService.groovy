@@ -5,7 +5,7 @@ import ratpack.service.Service
 import ratpack.service.StartEvent
 
 import javax.inject.Inject
-import io.rafflethor.raffle.bus.EventBusService
+import io.rafflethor.eb.EventBusService
 
 /**
  *

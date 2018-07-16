@@ -45,16 +45,16 @@ class RaffleService {
      * Lists all winners from a given raffle
      *
      * @param env data execution environment
-     * @return a {@link CompletableFuture} carrying a list of {@link RaffleWinner}
+     * @return a {@link CompletableFuture} carrying a list of {@link Winner}
      * @since 0.1.0
      */
-    CompletableFuture<List<RaffleWinner>> pickWinners(DataFetchingEnvironment env) {
+    CompletableFuture<List<Winner>> pickWinners(DataFetchingEnvironment env) {
         final UUID uuid = UUID.fromString(env.arguments.raffleId as String)
 
         return Futures
             .blocking({ uuid })
             .thenApply(twitterRepository.&findById)
-            .thenApply(twitterJudge.&pickWinners) as CompletableFuture<List<RaffleWinner>>
+            .thenApply(twitterJudge.&pickWinners) as CompletableFuture<List<Winner>>
         }
 
     CompletableFuture<Map> raffleRegistration(DataFetchingEnvironment env) {

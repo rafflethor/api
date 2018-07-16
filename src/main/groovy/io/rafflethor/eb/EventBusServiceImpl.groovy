@@ -1,4 +1,4 @@
-package io.rafflethor.raffle.bus
+package io.rafflethor.eb
 
 import com.google.common.eventbus.EventBus
 import com.google.common.eventbus.Subscribe

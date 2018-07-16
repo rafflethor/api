@@ -9,7 +9,7 @@ import org.reactivestreams.Subscriber
 import ratpack.rx.RxRatpack
 import ratpack.handling.Context
 import ratpack.stream.Streams
-import io.rafflethor.raffle.bus.EventBusService
+import io.rafflethor.eb.EventBusService
 
 class LivePublisherServiceImpl implements LivePublisherService {
 

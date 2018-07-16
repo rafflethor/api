@@ -8,7 +8,7 @@ import io.rafflethor.raffle.participant.ParticipantRepository
 import io.rafflethor.raffle.participant.ParticipantRepositoryImpl
 import ratpack.service.Service
 
-class RaffleModule extends AbstractModule {
+class Module extends AbstractModule {
     @Override
     protected void configure() {
         bind(TwitterRepository).to(TwitterRepositoryImpl).in(Scopes.SINGLETON)

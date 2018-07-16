@@ -9,7 +9,7 @@ import groovy.transform.Immutable
  * @since 0.1.0
  */
 @Immutable(knownImmutableClasses = [Raffle, LocalDate])
-class RaffleWinner {
+class Winner {
     /**
      * Unique identifier of the winner
      *

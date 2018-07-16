@@ -1,7 +1,7 @@
 package io.rafflethor.raffle.twitter
 
 import io.rafflethor.raffle.Raffle
-import io.rafflethor.raffle.RaffleWinner
+import io.rafflethor.raffle.Winner
 import io.rafflethor.raffle.test.Fixtures
 import spock.lang.Specification
 import twitter4j.Query
@@ -31,7 +31,7 @@ class TwitterJudgeSpec extends Specification {
         Raffle raffle = Fixtures.twitterRaffle()
 
         when: 'asking for a list of winners'
-        List<RaffleWinner> winnerList = judge.pickWinners(raffle)
+        List<Winner> winnerList = judge.pickWinners(raffle)
 
         then: 'the list of winners should be the same size of the raffle noWinners value'
         winnerList.size() == raffle.noWinners

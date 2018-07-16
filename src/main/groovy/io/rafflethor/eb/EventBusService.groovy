@@ -1,4 +1,4 @@
-package io.rafflethor.raffle.bus
+package io.rafflethor.eb
 
 import rx.Observable
 

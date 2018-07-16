@@ -7,7 +7,7 @@ import gql.DSL
 import graphql.schema.GraphQLSchema
 
 import io.rafflethor.raffle.RaffleService
-import io.rafflethor.event.EventService
+import io.rafflethor.raffle.organization.OrganizationService
 
 /**
  * Provider responsible for creating an instance of {@link GraphQLSchema}
@@ -20,7 +20,7 @@ class SchemaProvider implements Provider<GraphQLSchema> {
     RaffleService raffleService
 
     @Inject
-    EventService eventService
+    OrganizationService organizationService
 
     @Override
     GraphQLSchema get() {
@@ -33,12 +33,12 @@ class SchemaProvider implements Provider<GraphQLSchema> {
 
                 mapType('Queries') {
                     link('listAllRaffles', raffleService.&listAllRafflesByUser)
-                    link('listAllEvents', eventService.&listAll)
+                    link('listAllOrganizations', organizationService.&listAll)
                     link('pickWinners', raffleService.&pickWinners)
                 }
 
                 mapType('Mutations') {
-                    link('saveEvent', eventService.&save)
+                    link('saveOrganization', organizationService.&save)
                     link('eventRegistry', raffleService.&raffleRegistration)
                 }
             }

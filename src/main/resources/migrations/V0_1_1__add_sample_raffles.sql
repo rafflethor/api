@@ -1,4 +1,4 @@
-INSERT INTO events
+INSERT INTO organizations
   (id, name, description)
 VALUES
   ('135ef3e0-7c49-11e8-adc0-fa7ae01bbebc',
@@ -6,7 +6,7 @@ VALUES
    'This is a ficticious conference where everything could happen');
 
 INSERT INTO raffles
-  (id, name, type, noWinners, since, until, payload, eventId)
+  (id, name, type, noWinners, since, until, payload, organizationId)
 VALUES
   ('cc00c00e-6a42-11e8-adc0-fa7ae01bbebc',
    'raffle1',
@@ -36,7 +36,7 @@ VALUES
      1);
 
 INSERT INTO raffles
-  (id, name, type, noWinners, since, until, payload, eventId)
+  (id, name, type, noWinners, since, until, payload, organizationId)
 VALUES
   ('cc00c2ac-6a42-11e8-adc0-fa7ae01bbebc',
    'raffle2',

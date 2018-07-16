@@ -8,14 +8,16 @@ import io.rafflethor.config.Config
 import io.rafflethor.db.DataSourceModule
 import io.rafflethor.graphql.GraphQLExtraModule
 import io.rafflethor.init.InitModule
-import io.rafflethor.raffle.RaffleModule
 import io.rafflethor.raffle.twitter.TwitterModule
-import io.rafflethor.event.EventModule
+
+import io.rafflethor.raffle.Module as RaffleModule
+import io.rafflethor.raffle.organization.Module as OrganizationModule
+
 import ratpack.groovy.sql.SqlModule
 import ratpack.server.ServerConfigBuilder
 import io.rafflethor.raffle.live.LiveHandler
 import io.rafflethor.raffle.live.LiveModule
-import io.rafflethor.raffle.bus.EventBusModule
+import io.rafflethor.eb.EventBusModule
 
 ratpack {
     serverConfig { ServerConfigBuilder config ->
@@ -32,7 +34,7 @@ ratpack {
         module GraphQLExtraModule
         module TwitterModule
         module RaffleModule
-        module EventModule
+        module OrganizationModule
         module LiveModule
         module EventBusModule
     }

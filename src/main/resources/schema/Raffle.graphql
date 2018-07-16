@@ -42,13 +42,13 @@ type Winner {
   name: String
 }
 
-type Event {
+type Organization {
   id: String
   name: String
   description: String
 }
 
-input SaveEventInput {
+input SaveOrganizationInput {
   name: String!
   description: String!
 }
@@ -65,7 +65,7 @@ type Queries {
   listAllRaffles(max: Int!, offset: Int!): [Raffle]
 
   # list all events created by the current user
-  listAllEvents(max: Int!, offset: Int!): [Event]
+  listAllOrganizations(max: Int!, offset: Int!): [Organization]
 
   # list all winners from a given raffle
   pickWinners(raffleId: String): [Winner]
@@ -74,7 +74,7 @@ type Queries {
 type Mutations {
 
   # saves a new event. Returns the created event
-  saveEvent(event: SaveEventInput!): Event
+  saveOrganization(event: SaveOrganizationInput!): Organization
 
   # registers a given user with its email to a given raffle.
   # The service will return a unique participation hash
