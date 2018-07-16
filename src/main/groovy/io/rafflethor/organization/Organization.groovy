@@ -1,4 +1,4 @@
-package io.rafflethor.raffle.organization
+package io.rafflethor.organization
 
 class Organization {
     UUID id

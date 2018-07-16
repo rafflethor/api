@@ -1,4 +1,4 @@
-package io.rafflethor.raffle.participant
+package io.rafflethor.participant
 
 interface ParticipantRepository {
 

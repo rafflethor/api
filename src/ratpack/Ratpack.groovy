@@ -11,7 +11,8 @@ import io.rafflethor.init.InitModule
 import io.rafflethor.raffle.twitter.TwitterModule
 
 import io.rafflethor.raffle.Module as RaffleModule
-import io.rafflethor.raffle.organization.Module as OrganizationModule
+import io.rafflethor.organization.Module as OrganizationModule
+import io.rafflethor.participant.Module as ParticipantModule
 
 import ratpack.groovy.sql.SqlModule
 import ratpack.server.ServerConfigBuilder
@@ -34,6 +35,7 @@ ratpack {
         module GraphQLExtraModule
         module TwitterModule
         module RaffleModule
+        module ParticipantModule
         module OrganizationModule
         module LiveModule
         module EventBusModule

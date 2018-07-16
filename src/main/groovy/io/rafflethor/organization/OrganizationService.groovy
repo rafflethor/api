@@ -1,4 +1,4 @@
-package io.rafflethor.raffle.organization
+package io.rafflethor.organization
 
 import javax.inject.Inject
 import java.util.concurrent.CompletableFuture

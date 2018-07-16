@@ -7,7 +7,7 @@ import gql.ratpack.exec.Futures
 import graphql.schema.DataFetchingEnvironment
 import io.rafflethor.raffle.twitter.TwitterJudge
 import io.rafflethor.raffle.twitter.TwitterRepository
-import io.rafflethor.raffle.participant.ParticipantRepository
+import io.rafflethor.participant.ParticipantRepository
 
 /**
  * Service linked to GraphQL queries

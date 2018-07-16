@@ -7,7 +7,7 @@ import gql.DSL
 import graphql.schema.GraphQLSchema
 
 import io.rafflethor.raffle.RaffleService
-import io.rafflethor.raffle.organization.OrganizationService
+import io.rafflethor.organization.OrganizationService
 
 /**
  * Provider responsible for creating an instance of {@link GraphQLSchema}

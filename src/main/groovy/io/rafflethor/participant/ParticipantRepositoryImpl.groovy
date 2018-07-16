@@ -1,4 +1,4 @@
-package io.rafflethor.raffle.participant
+package io.rafflethor.participant
 
 import javax.inject.Inject
 import groovy.sql.Sql

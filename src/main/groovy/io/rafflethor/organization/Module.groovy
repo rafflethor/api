@@ -1,4 +1,4 @@
-package io.rafflethor.raffle.organization
+package io.rafflethor.organization
 
 import com.google.inject.AbstractModule
 import com.google.inject.Scopes

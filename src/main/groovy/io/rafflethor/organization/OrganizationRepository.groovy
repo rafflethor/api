@@ -1,4 +1,4 @@
-package io.rafflethor.raffle.organization
+package io.rafflethor.organization
 
 /**
  * @since 0.1.0
