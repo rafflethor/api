@@ -1,4 +1,4 @@
-package io.rafflethor.raffle.live
+package io.rafflethor.live
 
 import static ratpack.stream.Streams.periodically
 
@@ -11,7 +11,7 @@ import ratpack.handling.Context
 import ratpack.stream.Streams
 import io.rafflethor.eb.EventBusService
 
-class LivePublisherServiceImpl implements LivePublisherService {
+class PublisherServiceImpl implements PublisherService {
 
     @Inject
     EventBusService eventBusService

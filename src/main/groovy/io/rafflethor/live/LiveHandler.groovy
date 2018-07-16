@@ -1,4 +1,4 @@
-package io.rafflethor.raffle.live
+package io.rafflethor.live
 
 import static ratpack.sse.ServerSentEvents.serverSentEvents
 
@@ -22,7 +22,7 @@ class LiveHandler implements Handler {
      * @since 0.1.0
      */
     @Inject
-    LivePublisherService service
+    PublisherService service
 
     @Override
     void handle(Context ctx) {
