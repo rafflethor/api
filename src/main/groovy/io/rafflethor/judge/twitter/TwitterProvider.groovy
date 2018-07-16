@@ -1,4 +1,4 @@
-package io.rafflethor.raffle.twitter
+package io.rafflethor.judge.twitter
 
 import javax.inject.Inject
 import javax.inject.Provider

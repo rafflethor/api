@@ -8,8 +8,8 @@ import io.rafflethor.config.Config
 import io.rafflethor.db.DataSourceModule
 import io.rafflethor.graphql.GraphQLExtraModule
 import io.rafflethor.init.InitModule
-import io.rafflethor.raffle.twitter.TwitterModule
 
+import io.rafflethor.judge.twitter.Module as TwitterModule
 import io.rafflethor.raffle.Module as RaffleModule
 import io.rafflethor.organization.Module as OrganizationModule
 import io.rafflethor.participant.Module as ParticipantModule

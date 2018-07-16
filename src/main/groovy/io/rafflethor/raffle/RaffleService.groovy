@@ -5,8 +5,8 @@ import java.util.concurrent.CompletableFuture
 
 import gql.ratpack.exec.Futures
 import graphql.schema.DataFetchingEnvironment
-import io.rafflethor.raffle.twitter.TwitterJudge
-import io.rafflethor.raffle.twitter.TwitterRepository
+
+import io.rafflethor.judge.twitter.TwitterJudge
 import io.rafflethor.participant.ParticipantRepository
 
 /**
@@ -17,7 +17,7 @@ import io.rafflethor.participant.ParticipantRepository
 class RaffleService {
 
     @Inject
-    TwitterRepository twitterRepository
+    Repository raffleRepository
 
     @Inject
     ParticipantRepository participantRepository
@@ -37,7 +37,7 @@ class RaffleService {
         Integer offset = env.arguments.offset as Integer
 
         return Futures.blocking({
-            twitterRepository.listAll(max, offset)
+            raffleRepository.listAll(max, offset)
         })
     }
 
@@ -53,7 +53,7 @@ class RaffleService {
 
         return Futures
             .blocking({ uuid })
-            .thenApply(twitterRepository.&findById)
+            .thenApply(raffleRepository.&findById)
             .thenApply(twitterJudge.&pickWinners) as CompletableFuture<List<Winner>>
         }
 

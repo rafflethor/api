@@ -1,18 +1,17 @@
-package io.rafflethor.raffle.twitter
+package io.rafflethor.raffle
 
 import javax.inject.Inject
 import java.sql.Timestamp
 import groovy.sql.BatchingStatementWrapper
 import groovy.sql.GroovyRowResult
 import groovy.sql.Sql
-import io.rafflethor.raffle.Raffle
 
 /**
  * Repository to get raffles of twitter nature
  *
  * @since 0.1.0
  */
-class TwitterRepositoryImpl implements TwitterRepository {
+class RepositoryImpl implements Repository {
 
     @Inject
     Sql sql

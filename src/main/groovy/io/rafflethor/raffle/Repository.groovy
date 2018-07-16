@@ -1,18 +1,16 @@
-package io.rafflethor.raffle.twitter
-
-import io.rafflethor.raffle.Raffle
+package io.rafflethor.raffle
 
 /**
- * Repository to get raffles of twitter nature
+ * Repository to get raffles
  *
  * @since 0.1.0
  */
-interface TwitterRepository {
+interface Repository {
 
     static final List<String> FIELDS = ['id', 'name', 'noWinners', 'type', 'until', 'since']
 
     /**
-     * Lists all twitter raffles
+     * Lists all raffles
      *
      * @param max maximum number of results
      * @param offset the offset of the result
