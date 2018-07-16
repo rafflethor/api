@@ -6,8 +6,8 @@ import javax.inject.Provider
 import gql.DSL
 import graphql.schema.GraphQLSchema
 
-import io.rafflethor.raffle.RaffleService
-import io.rafflethor.organization.OrganizationService
+import io.rafflethor.raffle.Service as RaffleService
+import io.rafflethor.organization.Service as OrganizationService
 
 /**
  * Provider responsible for creating an instance of {@link GraphQLSchema}

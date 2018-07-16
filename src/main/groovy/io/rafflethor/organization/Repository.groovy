@@ -3,7 +3,7 @@ package io.rafflethor.organization
 /**
  * @since 0.1.0
  */
-interface OrganizationRepository {
+interface Repository {
 
     static final List<String> FIELDS = ['id', 'name', 'description']
 

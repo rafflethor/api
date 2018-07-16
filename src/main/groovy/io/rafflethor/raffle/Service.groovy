@@ -14,7 +14,7 @@ import io.rafflethor.participant.ParticipantRepository
  *
  * @since 0.1.0
  */
-class RaffleService {
+class Service {
 
     @Inject
     Repository raffleRepository

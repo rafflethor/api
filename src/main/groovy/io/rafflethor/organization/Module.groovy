@@ -6,6 +6,6 @@ import com.google.inject.Scopes
 class Module extends AbstractModule {
     @Override
     protected void configure() {
-        bind(OrganizationRepository).to(OrganizationRepositoryImpl).in(Scopes.SINGLETON)
+        bind(Repository).to(RepositoryImpl).in(Scopes.SINGLETON)
     }
 }

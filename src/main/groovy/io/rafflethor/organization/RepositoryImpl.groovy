@@ -6,7 +6,7 @@ import groovy.sql.Sql
 
 import io.rafflethor.db.Utils
 
-class OrganizationRepositoryImpl implements OrganizationRepository {
+class RepositoryImpl implements Repository {
 
     @Inject
     Sql sql
