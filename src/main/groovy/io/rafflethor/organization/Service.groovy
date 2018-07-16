@@ -21,7 +21,7 @@ class Service {
     }
 
     CompletableFuture<Organization> save(DataFetchingEnvironment env) {
-        Organization event = new Organization(env.arguments.event.subMap(Repository.FIELDS))
+        Organization event = new Organization(env.arguments.organization.subMap(Repository.FIELDS))
 
         return Futures.blocking {
             return repository.save(event)
