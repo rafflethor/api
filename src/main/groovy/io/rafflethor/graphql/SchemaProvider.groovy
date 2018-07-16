@@ -39,6 +39,7 @@ class SchemaProvider implements Provider<GraphQLSchema> {
 
                 mapType('Mutations') {
                     link('saveEvent', eventService.&save)
+                    link('eventRegistry', raffleService.&raffleRegistration)
                 }
             }
         }

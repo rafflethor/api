@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS raffles (
 CREATE TABLE IF NOT EXISTS participant (
   id UUID NOT NULL PRIMARY KEY,
   email VARCHAR(255) NOT NULL UNIQUE,
+  hash varchar(255),
   raffleId UUID
 );
 

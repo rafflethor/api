@@ -53,6 +53,12 @@ input SaveEventInput {
   description: String!
 }
 
+type RaffleRegistration {
+  hash: String
+  raffleId: String,
+  email: String
+}
+
 # All queries
 type Queries {
   # list all raffles created by the current user
@@ -69,6 +75,10 @@ type Mutations {
 
   # saves a new event. Returns the created event
   saveEvent(event: SaveEventInput!): Event
+
+  # registers a given user with its email to a given raffle.
+  # The service will return a unique participation hash
+  eventRegistry(raffleId: String, email: String!): RaffleRegistration
 }
 
 schema {

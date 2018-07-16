@@ -7,6 +7,7 @@ import gql.ratpack.exec.Futures
 import graphql.schema.DataFetchingEnvironment
 import io.rafflethor.raffle.twitter.TwitterJudge
 import io.rafflethor.raffle.twitter.TwitterRepository
+import io.rafflethor.raffle.participant.ParticipantRepository
 
 /**
  * Service linked to GraphQL queries
@@ -17,6 +18,9 @@ class RaffleService {
 
     @Inject
     TwitterRepository twitterRepository
+
+    @Inject
+    ParticipantRepository participantRepository
 
     @Inject
     TwitterJudge twitterJudge
@@ -51,5 +55,14 @@ class RaffleService {
             .blocking({ uuid })
             .thenApply(twitterRepository.&findById)
             .thenApply(twitterJudge.&pickWinners) as CompletableFuture<List<RaffleWinner>>
+        }
+
+    CompletableFuture<Map> raffleRegistration(DataFetchingEnvironment env) {
+        final UUID raffleId = UUID.fromString(env.arguments.raffleId as String)
+        final String email = env.arguments.email as String
+
+        return Futures.blocking({
+            participantRepository.registerUser(raffleId, email)
+        })
     }
 }
