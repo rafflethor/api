@@ -3,20 +3,20 @@ package io.rafflethor.raffle
 import static io.rafflethor.raffle.test.Exec.promise
 
 import graphql.schema.DataFetchingEnvironment
-import io.rafflethor.raffle.test.Fixtures
-import io.rafflethor.raffle.twitter.TwitterRepository
 import org.pac4j.core.profile.UserProfile
 import ratpack.handling.Context
 import ratpack.test.exec.ExecHarness
 import spock.lang.AutoCleanup
 import spock.lang.Specification
 
+import io.rafflethor.raffle.test.Fixtures
+
 /**
- * Checks all {@link RaffleService} related functions
+ * Checks all {@link Service} related functions
  *
  * @since 0.1.0
  */
-class RaffleServiceSpec extends Specification {
+class ServiceSpec extends Specification {
 
     @AutoCleanup
     ExecHarness execHarness = ExecHarness.harness()
@@ -24,12 +24,12 @@ class RaffleServiceSpec extends Specification {
     void 'list all raffles: successful result'() {
         given: 'a repository, judge mocks'
         List<Raffle> raffleList = Fixtures.twitterRaffleList()
-        TwitterRepository repository = Stub(TwitterRepository) {
+        Repository repository = Stub(Repository) {
             listAll(_ as Integer, _ as Integer) >> raffleList
         }
 
         and: 'a service implementation'
-        RaffleService service = new RaffleService(twitterRepository: repository)
+        Service service = new Service(raffleRepository: repository)
 
         and: 'a valid fetching environment'
         Map<String, Object> arguments = [max: 5, offset: 0]

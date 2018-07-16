@@ -1,4 +1,4 @@
-package io.rafflethor.raffle.twitter
+package io.rafflethor.judge.twitter
 
 import io.rafflethor.raffle.Raffle
 import io.rafflethor.raffle.Winner
