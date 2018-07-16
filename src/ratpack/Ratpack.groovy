@@ -13,6 +13,9 @@ import io.rafflethor.raffle.twitter.TwitterModule
 import io.rafflethor.event.EventModule
 import ratpack.groovy.sql.SqlModule
 import ratpack.server.ServerConfigBuilder
+import io.rafflethor.raffle.live.LiveHandler
+import io.rafflethor.raffle.live.LiveModule
+import io.rafflethor.raffle.bus.EventBusModule
 
 ratpack {
     serverConfig { ServerConfigBuilder config ->
@@ -30,6 +33,8 @@ ratpack {
         module TwitterModule
         module RaffleModule
         module EventModule
+        module LiveModule
+        module EventBusModule
     }
 
     handlers {
@@ -41,6 +46,10 @@ ratpack {
 
             post("", GraphQLHandler)
             get('browser', GraphiQLHandler)
+        }
+
+        prefix('raffle/live') {
+            get('', LiveHandler)
         }
     }
 }

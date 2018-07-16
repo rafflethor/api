@@ -12,6 +12,7 @@ class InitModule extends AbstractModule {
 
         servicesBinder.with {
             addBinding().to(FlywayService).in(Scopes.SINGLETON)
+            addBinding().to(WelcomeNotificationService).in(Scopes.SINGLETON)
         }
     }
 }
