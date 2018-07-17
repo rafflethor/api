@@ -34,11 +34,13 @@ class SchemaProvider implements Provider<GraphQLSchema> {
                 mapType('Queries') {
                     link('listAllRaffles', raffleService.&listAllRafflesByUser)
                     link('listAllOrganizations', organizationService.&listAll)
+                    link('organization', organizationService.&get)
                     link('pickWinners', raffleService.&pickWinners)
                 }
 
                 mapType('Mutations') {
                     link('saveOrganization', organizationService.&save)
+                    link('saveRaffle', raffleService.&save)
                     link('eventRegistry', raffleService.&raffleRegistration)
                 }
             }

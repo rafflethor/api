@@ -16,5 +16,6 @@ interface Repository {
     List<Organization> listAll(Integer max, Integer offset)
 
 
+    Organization get(UUID id)
     Organization save(Organization event)
 }

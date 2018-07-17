@@ -57,6 +57,12 @@ class Service {
             .thenApply(twitterJudge.&pickWinners) as CompletableFuture<List<Winner>>
         }
 
+    CompletableFuture<Raffle> save(DataFetchingEnvironment env) {
+        return Futures.blocking {
+            raffleRepository.save(new Raffle(env.arguments.input.subMap(Repository.FIELDS)))
+        }
+    }
+
     CompletableFuture<Map> raffleRegistration(DataFetchingEnvironment env) {
         final UUID raffleId = UUID.fromString(env.arguments.raffleId as String)
         final String email = env.arguments.email as String

@@ -5,6 +5,7 @@ import groovy.sql.GroovyRowResult
 import groovy.sql.Sql
 
 import io.rafflethor.db.Utils
+import io.rafflethor.raffle.Raffle
 
 class RepositoryImpl implements Repository {
 
@@ -22,6 +23,38 @@ class RepositoryImpl implements Repository {
         return new Organization(result.subMap(FIELDS))
     }
 
+    @Override
+    Organization get(UUID uuid) {
+        GroovyRowResult row =  sql
+            .firstRow('SELECT * FROM organizations WHERE id = ?', uuid)
+
+        if (!row) {
+            return
+        }
+
+        Organization organization = this.toOrganization(row)
+
+        List<Raffle> rows = sql
+            .rows('SELECT * FROM raffles WHERE organizationId = ?', organization.id)
+            .collect(this.&toRaffle)
+
+        organization.raffles = rows
+
+        return organization
+    }
+
+    private static Raffle toRaffle(GroovyRowResult row) {
+        List<String> RAFFLE_FIELDS = ['id', 'name', 'noWinners', 'type', 'until', 'since']
+
+        String pgObject = row['payload'].value
+        Map payload = new groovy.json.JsonSlurper().parseText(pgObject)
+        Raffle raffle =  new Raffle(row.subMap(RAFFLE_FIELDS))
+
+        raffle.payload = payload
+        return raffle
+    }
+
+    @Override
     Organization save(Organization event) {
         UUID uuid = Utils.generateUUID()
 

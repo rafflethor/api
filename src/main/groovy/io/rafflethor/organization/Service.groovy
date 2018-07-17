@@ -20,6 +20,14 @@ class Service {
         }
     }
 
+    CompletableFuture<Organization> get(DataFetchingEnvironment env) {
+        UUID uuid = UUID.fromString(env.arguments.id)
+
+        return Futures.blocking({
+            return repository.get(uuid)
+        })
+    }
+
     CompletableFuture<Organization> save(DataFetchingEnvironment env) {
         Organization event = new Organization(env.arguments.organization.subMap(Repository.FIELDS))
 

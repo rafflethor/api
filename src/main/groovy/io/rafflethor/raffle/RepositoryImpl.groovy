@@ -6,6 +6,8 @@ import groovy.sql.BatchingStatementWrapper
 import groovy.sql.GroovyRowResult
 import groovy.sql.Sql
 
+import io.rafflethor.db.Utils
+
 /**
  * Repository to get raffles of twitter nature
  *
@@ -32,29 +34,30 @@ class RepositoryImpl implements Repository {
     }
 
     @Override
-    void saveBatch(List<Raffle> raffles) {
-        sql.withBatch(10) { BatchingStatementWrapper stmt ->
-            raffles.each { Raffle raffle ->
-                stmt.addBatch(buildRaffleQuery(raffle))
-            }
-        }
+    Raffle save(Raffle raffle) {
+        UUID uuid = Utils.generateUUID()
+        raffle.id = uuid
+
+        sql.executeInsert(buildRaffleQuery(raffle))
+
+        return raffle
     }
 
     private static String buildRaffleQuery(Raffle raffle) {
-        String since = raffle.since.format('yyyy-MM-dd hh:mm:ss')
-        String until = raffle.until.format('yyyy-MM-dd hh:mm:ss')
-
         return """
-          INSERT INTO raffles (id, name, noWinners, payload, since, until)
+          INSERT INTO raffles (id, name, type, noWinners)
           VALUES (
-          '${raffle.id}', '${raffle.name}', ${raffle.noWinners}, '${raffle.hashTag}', '${since}', '${until}'
+          '${raffle.id}', '${raffle.name}', '${raffle.type}', ${raffle.noWinners}
           )
         """
     }
 
     private static Raffle toRaffle(GroovyRowResult row) {
-        String pgObject = row['payload'].value
-        Map payload = new groovy.json.JsonSlurper().parseText(pgObject)
+        String pgObject = row['payload']?.value
+        Map payload = pgObject ?
+            new groovy.json.JsonSlurper().parseText(pgObject) :
+            [:]
+
         Raffle raffle =  new Raffle(row.subMap(FIELDS))
 
         raffle.payload = payload

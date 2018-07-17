@@ -27,11 +27,5 @@ interface Repository {
      */
     Raffle findById(UUID id)
 
-    /**
-     * Saves all raffles passed as parameters in one batch
-     *
-     * @param raffles the list of raffles to be saved
-     * @since 0.1.0
-     */
-    void saveBatch(List<Raffle> raffles)
+    Raffle save(Raffle raffle)
 }

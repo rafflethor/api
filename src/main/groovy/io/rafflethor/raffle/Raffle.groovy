@@ -1,10 +1,13 @@
 package io.rafflethor.raffle
 
+import groovy.transform.ToString
+
 /**
  * Base class for all raffles
  *
  * @since 0.1.0
  */
+@ToString
 class Raffle {
 
     /**
