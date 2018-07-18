@@ -17,10 +17,15 @@ CREATE TABLE IF NOT EXISTS raffles (
   createdAt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS participant (
+CREATE TABLE IF NOT EXISTS raffle_spot (
+  id varchar(4) NOT NULL,
+  raffleId UUID
+);
+
+CREATE TABLE IF NOT EXISTS participants (
   id UUID NOT NULL PRIMARY KEY,
-  email VARCHAR(255) NOT NULL UNIQUE,
-  hash varchar(255),
+  email VARCHAR(255),
+  hash varchar(255) NOT NULL,
   raffleId UUID
 );
 

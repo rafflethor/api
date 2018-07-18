@@ -95,7 +95,7 @@ type Mutations {
 
   # registers a given user with its email to a given raffle.
   # The service will return a unique participation hash
-  eventRegistry(raffleId: String, email: String!): RaffleRegistration
+  eventRegistry(spotId: String, email: String!): RaffleRegistration
 }
 
 schema {

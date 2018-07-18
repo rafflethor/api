@@ -64,11 +64,31 @@ class Service {
     }
 
     CompletableFuture<Map> raffleRegistration(DataFetchingEnvironment env) {
-        final UUID raffleId = UUID.fromString(env.arguments.raffleId as String)
+        final String spotId = env.arguments.spotId as String
         final String email = env.arguments.email as String
 
-        return Futures.blocking({
-            participantRepository.registerUser(raffleId, email)
-        })
+        return Futures.blocking({ spotId })
+            .thenApply(raffleRepository.&findRaffleFromSpot)
+            .thenApply({ Raffle raffle ->
+               processRegistration(raffle, spotId, email)
+            })
+    }
+
+    Map processRegistration(Raffle raffle, String spotId, String email) {
+        return Optional
+            .ofNullable(raffle)
+            .map({ Raffle raff ->
+                switch (raff.type) {
+                  case 'TWITTER': return participantRepository.registerUser(raff.id, email)
+                  case 'LIVE': return processLiveRegistration(raff, email)
+                }
+        }).orElse([:])
+    }
+
+    Map processLiveRegistration(Raffle raffle, String email) {
+        return Optional
+            .ofNullable(email)
+            .map({ String mail -> participantRepository.registerUser(raffle, mail) })
+            .orElse([:])
     }
 }

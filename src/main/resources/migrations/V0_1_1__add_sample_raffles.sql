@@ -55,3 +55,24 @@ VALUES
      'T-Shirt of the Piweek',
      'cc00c2ac-6a42-11e8-adc0-fa7ae01bbebc',
      0);
+
+INSERT INTO raffle_spot
+    (id, raffleId)
+VALUES
+    ('AAAA', 'cc00c2ac-6a42-11e8-adc0-fa7ae01bbebc');
+
+INSERT INTO raffle_spot
+    (id, raffleId)
+VALUES
+    ('BBBB', 'cc00c00e-6a42-11e8-adc0-fa7ae01bbebc');
+
+
+INSERT INTO raffle_spot
+    (id)
+VALUES
+    ('CCCC');
+
+INSERT INTO raffle_spot
+    (id)
+VALUES
+    ('DDDD');

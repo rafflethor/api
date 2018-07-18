@@ -27,5 +27,7 @@ interface Repository {
      */
     Raffle findById(UUID id)
 
+    Raffle findRaffleFromSpot(String spotId)
+
     Raffle save(Raffle raffle)
 }

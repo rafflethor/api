@@ -27,10 +27,12 @@ class RepositoryImpl implements Repository {
 
     @Override
     Raffle findById(UUID id) {
-        return sql
-            .rows("select * from twitter_raffles where id = :id", id: id)
+        Raffle raffle = sql
+            .rows("select * from raffles where id = :id", id: id)
             .collect(this.&toRaffle)
             .find()
+
+        return raffle
     }
 
     @Override
@@ -62,5 +64,17 @@ class RepositoryImpl implements Repository {
 
         raffle.payload = payload
         return raffle
+    }
+
+    @Override
+    Raffle findRaffleFromSpot(String spotId) {
+        UUID uuid = sql
+            .firstRow("SELECT raffleId  as id FROM raffle_spot WHERE id = ?", spotId)
+            .id
+
+        return Optional
+            .ofNullable(uuid)
+            .map(this.&findById)
+            .orElse(null)
     }
 }
