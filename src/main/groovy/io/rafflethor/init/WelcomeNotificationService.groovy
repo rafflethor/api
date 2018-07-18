@@ -23,7 +23,14 @@ class WelcomeNotificationService implements Service {
 
         new Thread().start({
             Thread.sleep(30000)
-            eventBusService.publish(id: 'id', data: [name: '@john'])
+            (10..0).each { countdown ->
+                eventBusService.publish(
+                    event: 'countdown',
+                    id: new Date().time.toString(),
+                    data: countdown.toString()
+                )
+                Thread.sleep(1000)
+            }
         })
     }
 }

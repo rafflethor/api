@@ -27,10 +27,15 @@ class LiveHandler implements Handler {
     @Override
     void handle(Context ctx) {
         Publisher<Map> publisher = service
-            .registerPublisher(ctx, 'email', 'raffleId')
+            .registerPublisher(ctx,
+                               ctx.pathTokens.id,
+                               ctx.pathTokens.hash)
 
         ctx.render(serverSentEvents(publisher, { Event event ->
-            event.id('id').data('kk')
+            return event
+                .data({ Map payload -> payload.data })
+                .id({ Map payload -> payload.id})
+                .event({ Map payload -> payload.event})
         }))
     }
 }

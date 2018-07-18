@@ -17,8 +17,11 @@ class PublisherServiceImpl implements PublisherService {
     EventBusService eventBusService
 
     @Override
-    Publisher<Map> registerPublisher(Context context, String email, String raffleId) {
-        Publisher<Map> stream = RxRatpack.publisher(eventBusService.create())
+    Publisher<Map> registerPublisher(Context context, String raffleId, String userHash) {
+        println "registering publisher for raffleId: $raffleId and userHash: $userHash"
+
+        Publisher<Map> stream = RxRatpack
+            .publisher(eventBusService.create())
 
         return stream
     }

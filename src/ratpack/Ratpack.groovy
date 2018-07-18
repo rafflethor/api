@@ -53,8 +53,8 @@ ratpack {
             get('browser', GraphiQLHandler)
         }
 
-        prefix('raffle/live') {
-            get('', LiveHandler)
+        prefix('raffle') {
+            get('/:id/:hash', LiveHandler)
         }
     }
 }
