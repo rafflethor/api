@@ -88,7 +88,7 @@ class Service {
     Map processLiveRegistration(Raffle raffle, String email) {
         return Optional
             .ofNullable(email)
-            .map({ String mail -> participantRepository.registerUser(raffle, mail) })
-            .orElse([:])
+            .map({ String mail -> participantRepository.registerUser(raffle.id, mail) })
+            .orElse([raffleId: raffle.id])
     }
 }
