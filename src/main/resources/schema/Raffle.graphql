@@ -81,6 +81,9 @@ type Queries {
   # Gets the information of a given organization by its id
   organization(id: String): Organization
 
+  # Gets the information of a given raffle by its id
+  raffle(id: String): Raffle
+
   # list all winners from a given raffle
   pickWinners(raffleId: String): [Winner]
 }

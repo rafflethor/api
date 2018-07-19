@@ -91,4 +91,12 @@ class Service {
             .map({ String mail -> participantRepository.registerUser(raffle.id, mail) })
             .orElse([raffleId: raffle.id])
     }
+
+    CompletableFuture<Map> findById(DataFetchingEnvironment env) {
+        final UUID uuid = UUID.fromString(env.arguments.id)
+
+        return Futures.blocking({
+            return raffleRepository.findById(uuid)
+        })
+    }
 }
