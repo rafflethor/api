@@ -39,6 +39,13 @@ class Raffle {
     String type
 
     /**
+     * Whether the current raffle is still going or has finished
+     *
+     * @since 0.1.0
+     */
+    String status
+
+    /**
      * {@link Raffle} related information
      *
      * @since 0.1.0

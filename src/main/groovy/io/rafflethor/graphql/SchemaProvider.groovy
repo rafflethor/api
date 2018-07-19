@@ -43,6 +43,7 @@ class SchemaProvider implements Provider<GraphQLSchema> {
                     link('saveOrganization', organizationService.&save)
                     link('saveRaffle', raffleService.&save)
                     link('eventRegistry', raffleService.&raffleRegistration)
+                    link('startRaffle', raffleService.&startRaffle)
                 }
             }
         }

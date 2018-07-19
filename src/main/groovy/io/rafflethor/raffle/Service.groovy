@@ -1,5 +1,6 @@
 package io.rafflethor.raffle
 
+import groovy.json.JsonOutput
 import javax.inject.Inject
 import java.util.concurrent.CompletableFuture
 
@@ -8,6 +9,7 @@ import graphql.schema.DataFetchingEnvironment
 
 import io.rafflethor.judge.twitter.TwitterJudge
 import io.rafflethor.participant.ParticipantRepository
+import io.rafflethor.eb.EventBusService
 
 /**
  * Service linked to GraphQL queries
@@ -24,6 +26,9 @@ class Service {
 
     @Inject
     TwitterJudge twitterJudge
+
+    @Inject
+    EventBusService eventBusService
 
     /**
      * Lists all available raffles
@@ -97,6 +102,14 @@ class Service {
 
         return Futures.blocking({
             return raffleRepository.findById(uuid)
+        })
+    }
+
+    CompletableFuture<Map> startRaffle(DataFetchingEnvironment env) {
+        final UUID uuid = UUID.fromString(env.arguments.id)
+
+        return Futures.blocking({
+            return raffleRepository.markRaffleWaiting(uuid)
         })
     }
 }

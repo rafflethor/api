@@ -7,7 +7,7 @@ package io.rafflethor.raffle
  */
 interface Repository {
 
-    static final List<String> FIELDS = ['id', 'name', 'noWinners', 'type', 'until', 'since']
+    static final List<String> FIELDS = ['id', 'name', 'noWinners', 'type', 'status', 'until', 'since']
 
     /**
      * Lists all raffles
@@ -30,4 +30,13 @@ interface Repository {
     Raffle findRaffleFromSpot(String spotId)
 
     Raffle save(Raffle raffle)
+
+    Raffle markRaffleWaiting(UUID id)
+    Raffle markRaffleLive(UUID id)
+    Raffle markRaffleFinished(UUID id)
+
+    Raffle findWaitingRaffle()
+    Map findRandomWinner(UUID id)
+
+
 }

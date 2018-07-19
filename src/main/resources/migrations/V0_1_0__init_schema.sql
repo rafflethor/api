@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS raffles (
   type varchar(255),
   payload json,
   organizationId UUID,
+  status varchar(50),
   since timestamp,
   until timestamp,
   createdAt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP

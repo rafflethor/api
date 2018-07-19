@@ -55,6 +55,10 @@ class RepositoryImpl implements Repository {
     }
 
     private static Raffle toRaffle(GroovyRowResult row) {
+        if (!row) {
+            return null
+        }
+
         String pgObject = row['payload']?.value
         Map payload = pgObject ?
             new groovy.json.JsonSlurper().parseText(pgObject) :
@@ -76,5 +80,36 @@ class RepositoryImpl implements Repository {
             .ofNullable(uuid)
             .map(this.&findById)
             .orElse(null)
+    }
+
+    Raffle markRaffleWaiting(UUID id) {
+        sql.executeUpdate("UPDATE raffles SET status = 'WAITING' WHERE id = ?", id)
+
+        return findById(id)
+    }
+
+    Raffle markRaffleLive(UUID id) {
+        sql.executeUpdate("UPDATE raffles SET status = 'LIVE' WHERE id = ?", id)
+
+        return findById(id)
+    }
+
+    Raffle markRaffleFinished(UUID id) {
+        sql.executeUpdate("UPDATE raffles SET status = 'FINISHED' WHERE id = ?", id)
+
+        return findById(id)
+    }
+
+    Raffle findWaitingRaffle() {
+        return toRaffle(sql.firstRow("SELECT * FROM raffles WHERE status = 'WAITING'"))
+    }
+
+    Map findRandomWinner(UUID id) {
+        List<Map> participants =  sql
+            .rows("SELECT * FROM participants WHERE raffleId = ?", id)
+
+        Collections.shuffle(participants)
+
+        return participants.find()
     }
 }
