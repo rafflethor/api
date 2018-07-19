@@ -40,18 +40,14 @@ class RepositoryImpl implements Repository {
         UUID uuid = Utils.generateUUID()
         raffle.id = uuid
 
-        sql.executeInsert(buildRaffleQuery(raffle))
+        sql.executeInsert("""
+          INSERT INTO raffles
+            (id, name, type, noWinners)
+          VALUES
+            (?, ?, ?, ?)
+        """, raffle.id, raffle.name, raffle.type, raffle.noWinners)
 
         return raffle
-    }
-
-    private static String buildRaffleQuery(Raffle raffle) {
-        return """
-          INSERT INTO raffles (id, name, type, noWinners)
-          VALUES (
-          '${raffle.id}', '${raffle.name}', '${raffle.type}', ${raffle.noWinners}
-          )
-        """
     }
 
     private static Raffle toRaffle(GroovyRowResult row) {
@@ -104,12 +100,43 @@ class RepositoryImpl implements Repository {
         return toRaffle(sql.firstRow("SELECT * FROM raffles WHERE status = 'WAITING'"))
     }
 
-    Map findRandomWinner(UUID id) {
+    List<Map> saveWinners(Raffle raffle, List<Map> participants) {
+        sql.withTransaction {
+            participants.each { p ->
+                UUID uuid = Utils.generateUUID()
+
+                println "==>$p"
+                sql.executeInsert(
+                    "INSERT INTO winners (id, participantId, raffleId) VALUES (?, ?, ?)",
+                    uuid,
+                    p.id,
+                    p.raffleId)
+            }
+        }
+
+        return sql.rows("SELECT * FROM winners WHERE raffleId = ?", raffle.id)
+    }
+
+    List<Map> findAllRandomWinners(Raffle raffle) {
         List<Map> participants =  sql
-            .rows("SELECT * FROM participants WHERE raffleId = ?", id)
+            .rows("SELECT * FROM participants WHERE raffleId = ?", raffle.id)
 
         Collections.shuffle(participants)
+        List<Map> winners = participants.take(raffle.noWinners)
 
-        return participants.find()
+        saveWinners(raffle, winners)
+        return winners
+    }
+
+    Map checkRaffleResult(UUID id, String userHash) {
+        Raffle raffle = findById(id)
+        List<Map> winners = sql.rows("SELECT * FROM winners WHERE raffleId = ?")
+        Boolean didIWin = userHash in winners*.hash
+
+        return [
+            winners: winners,
+            itsMe: didIWin,
+            raffle: raffle
+        ]
     }
 }

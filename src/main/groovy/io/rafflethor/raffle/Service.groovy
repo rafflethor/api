@@ -112,4 +112,13 @@ class Service {
             return raffleRepository.markRaffleWaiting(uuid)
         })
     }
+
+    CompletableFuture<Map> checkRaffleResult(DataFetchingEnvironment env) {
+        UUID raffleId = UUID.fromString(env.arguments.id)
+        String userHash = env.arguments.hash
+
+        return Futures.blocking({
+            raffleRepository.checkRaffleResult(raffleId, userHash)
+        })
+    }
 }

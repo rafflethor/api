@@ -36,7 +36,7 @@ interface Repository {
     Raffle markRaffleFinished(UUID id)
 
     Raffle findWaitingRaffle()
-    Map findRandomWinner(UUID id)
-
+    List<Map> findAllRandomWinners(Raffle raffle)
+    Map checkRaffleResult(UUID id, String userHash)
 
 }

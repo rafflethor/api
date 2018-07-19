@@ -76,13 +76,13 @@ class WelcomeNotificationService implements Service {
             log.info("countdown for ${raffle.id}")
             executeCountdown()
 
-            Map winner = raffleRepository.findRandomWinner(raffle.id)
+            List<Map> winners = raffleRepository.findAllRandomWinners(raffle)
 
             log.info("winner for ${raffle.id}")
             eventBusService.publish(
                 id: new Date().time.toString(),
                 data: JsonOutput.toJson(
-                    data: winner?.hash ?: 'Rafflethor',
+                    data: winners?.hash ?: 'Rafflethor',
                     type: 'winner'
                 )
             )
