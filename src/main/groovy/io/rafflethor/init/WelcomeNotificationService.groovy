@@ -1,6 +1,7 @@
 package io.rafflethor.init
 
 import groovy.util.logging.Slf4j
+import groovy.json.JsonOutput
 import ratpack.service.Service
 import ratpack.service.StartEvent
 
@@ -25,9 +26,8 @@ class WelcomeNotificationService implements Service {
             Thread.sleep(30000)
             (10..0).each { countdown ->
                 eventBusService.publish(
-                    event: 'countdown',
                     id: new Date().time.toString(),
-                    data: countdown.toString()
+                    data: JsonOutput.toJson(data: countdown.toString(), type: 'countdown')
                 )
                 Thread.sleep(1000)
             }

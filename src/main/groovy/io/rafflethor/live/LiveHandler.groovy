@@ -35,7 +35,6 @@ class LiveHandler implements Handler {
             return event
                 .data({ Map payload -> payload.data })
                 .id({ Map payload -> payload.id})
-                .event({ Map payload -> payload.event})
         }))
     }
 }
