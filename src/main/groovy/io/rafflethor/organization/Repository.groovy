@@ -18,4 +18,5 @@ interface Repository {
 
     Organization get(UUID id)
     Organization save(Organization event)
+    Organization byRaffleId(UUID raffleId)
 }

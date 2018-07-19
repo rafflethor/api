@@ -5,6 +5,7 @@ import java.util.concurrent.CompletableFuture
 
 import graphql.schema.DataFetchingEnvironment
 import gql.ratpack.exec.Futures
+import io.rafflethor.raffle.Raffle
 
 class Service {
 
@@ -34,5 +35,11 @@ class Service {
         return Futures.blocking {
             return repository.save(event)
         }
+    }
+
+    Organization byRaffle(DataFetchingEnvironment env) {
+        Raffle raffle = env.getSource()
+
+        return repository.byRaffleId(raffle.id)
     }
 }

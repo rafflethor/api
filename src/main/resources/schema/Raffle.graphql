@@ -7,6 +7,8 @@ interface Raffle {
   type: String
   # How many winners this raffle has
   noWinners: Int
+  # the organization the raffle belongs to
+  organization: Organization
 }
 
 # A Raffle that pick winners from a Twitter hashtag
@@ -24,6 +26,8 @@ type TwitterRaffle implements Raffle {
   until: String
   # Users Tweeting with this hashTag are eligible to win
   hashTag: String
+  # the organization the raffle belongs to
+  organization: Organization
 }
 
 # A Raffle that pick winners from a list randomly
@@ -35,6 +39,8 @@ type RandomListRaffle implements Raffle {
   noWinners: Int
   # type of the raffle
   type: String
+  # the organization the raffle belongs to
+  organization: Organization
 }
 
 type Winner {

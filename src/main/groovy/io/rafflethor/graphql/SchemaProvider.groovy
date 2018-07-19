@@ -31,6 +31,14 @@ class SchemaProvider implements Provider<GraphQLSchema> {
                     typeResolver(Utils.raffleTypeResolver())
                 }
 
+                mapType('TwitterRaffle') {
+                    link('organization', organizationService.&byRaffle)
+                }
+
+                mapType('RandomListRaffle') {
+                    link('organization', organizationService.&byRaffle)
+                }
+
                 mapType('Queries') {
                     link('listAllRaffles', raffleService.&listAllRafflesByUser)
                     link('listAllOrganizations', organizationService.&listAll)

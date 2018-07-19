@@ -64,4 +64,15 @@ class RepositoryImpl implements Repository {
         event.id = uuid
         return event
     }
+
+    Organization byRaffleId(UUID raffleId) {
+        GroovyRowResult row = sql.firstRow("""
+          SELECT * FROM
+            organizations
+          WHERE
+            id = (SELECT organizationId FROM raffles WHERE id = ?)
+        """, raffleId)
+
+        return toOrganization(row)
+    }
 }
