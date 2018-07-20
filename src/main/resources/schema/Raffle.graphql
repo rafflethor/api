@@ -44,8 +44,8 @@ type RandomListRaffle implements Raffle {
 }
 
 type Winner {
-  id: String
-  name: String
+  email: String
+  hash: String
 }
 
 type Organization {
@@ -79,7 +79,7 @@ type RaffleRegistration {
 type RaffleResult {
   raffle: Raffle
   winners: [Winner]
-  itsMe: Boolean
+  didIWin: Boolean
 }
 
 # All queries

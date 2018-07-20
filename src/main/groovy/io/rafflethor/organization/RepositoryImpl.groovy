@@ -45,10 +45,12 @@ class RepositoryImpl implements Repository {
 
     private static Raffle toRaffle(GroovyRowResult row) {
         List<String> RAFFLE_FIELDS = ['id', 'name', 'noWinners', 'type', 'until', 'since']
-
-        String pgObject = row['payload'].value
-        Map payload = new groovy.json.JsonSlurper().parseText(pgObject)
         Raffle raffle =  new Raffle(row.subMap(RAFFLE_FIELDS))
+
+        String pgObject = row['payload']?.value
+        Map payload = pgObject ?
+            new groovy.json.JsonSlurper().parseText(pgObject) :
+            [:]
 
         raffle.payload = payload
         return raffle

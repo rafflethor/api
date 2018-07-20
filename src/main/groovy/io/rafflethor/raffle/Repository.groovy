@@ -7,7 +7,15 @@ package io.rafflethor.raffle
  */
 interface Repository {
 
-    static final List<String> FIELDS = ['id', 'name', 'noWinners', 'type', 'status', 'until', 'since']
+    static final List<String> FIELDS = [
+        'id',
+        'name',
+        'noWinners',
+        'type',
+        'status',
+        'until',
+        'since'
+    ]
 
     /**
      * Lists all raffles

@@ -42,10 +42,10 @@ class RepositoryImpl implements Repository {
 
         sql.executeInsert("""
           INSERT INTO raffles
-            (id, name, type, noWinners)
+            (id, name, type, noWinners, organizationId)
           VALUES
-            (?, ?, ?, ?)
-        """, raffle.id, raffle.name, raffle.type, raffle.noWinners)
+            (?, ?, ?, ?, ?)
+        """, raffle.id, raffle.name, raffle.type, raffle.noWinners, raffle.organizationId)
 
         return raffle
     }
@@ -105,7 +105,6 @@ class RepositoryImpl implements Repository {
             participants.each { p ->
                 UUID uuid = Utils.generateUUID()
 
-                println "==>$p"
                 sql.executeInsert(
                     "INSERT INTO winners (id, participantId, raffleId) VALUES (?, ?, ?)",
                     uuid,
@@ -130,12 +129,20 @@ class RepositoryImpl implements Repository {
 
     Map checkRaffleResult(UUID id, String userHash) {
         Raffle raffle = findById(id)
-        List<Map> winners = sql.rows("SELECT * FROM winners WHERE raffleId = ?")
+        List<Map> winners = sql.rows("""
+          SELECT
+            p.hash,
+            p.email
+          FROM winners w JOIN participants p ON
+            w.participantId = p.id
+          WHERE w.raffleId = ?
+        """, id)
+
         Boolean didIWin = userHash in winners*.hash
 
         return [
             winners: winners,
-            itsMe: didIWin,
+            didIWin: didIWin,
             raffle: raffle
         ]
     }

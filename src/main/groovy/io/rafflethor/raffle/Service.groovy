@@ -63,8 +63,13 @@ class Service {
         }
 
     CompletableFuture<Raffle> save(DataFetchingEnvironment env) {
+        Map<String, ?> input = env.arguments.input as Map<String, ?>
+        Raffle raffle = new Raffle(input?.subMap(Repository.FIELDS))
+
+        raffle.organizationId = UUID.fromString(env.arguments.input.organizationId as String)
+
         return Futures.blocking {
-            raffleRepository.save(new Raffle(env.arguments.input.subMap(Repository.FIELDS)))
+            raffleRepository.save(raffle)
         }
     }
 

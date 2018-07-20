@@ -17,6 +17,8 @@ class Raffle {
      */
     UUID id
 
+    UUID organizationId
+
     /**
      * The name of the raffle
      *

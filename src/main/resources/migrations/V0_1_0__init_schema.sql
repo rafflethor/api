@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS raffles (
   noWinners INT,
   type varchar(255),
   payload json,
-  organizationId UUID,
+  organizationId UUID NOT NULL,
   status varchar(50),
   since timestamp,
   until timestamp,
