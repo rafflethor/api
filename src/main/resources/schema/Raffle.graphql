@@ -124,6 +124,9 @@ type Mutations {
 
   # Starts a given raffle
   startRaffle(id: String!): Raffle
+
+  # deletes a given organization by its id
+  deleteRaffle(id: String!): DeleteResult
 }
 
 schema {

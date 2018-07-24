@@ -47,4 +47,5 @@ interface Repository {
     List<Map> findAllRandomWinners(Raffle raffle)
     Map checkRaffleResult(UUID id, String userHash)
 
+    Boolean delete(UUID id)
 }

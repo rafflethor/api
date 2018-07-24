@@ -126,4 +126,12 @@ class Service {
             raffleRepository.checkRaffleResult(raffleId, userHash)
         })
     }
+
+    CompletableFuture<Map> delete(DataFetchingEnvironment env) {
+        UUID raffleId = UUID.fromString(env.arguments.id)
+
+        return Futures.blocking({
+            return [deleted: raffleRepository.delete(raffleId)]
+        })
+    }
 }

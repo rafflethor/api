@@ -146,4 +146,14 @@ class RepositoryImpl implements Repository {
             raffle: raffle
         ]
     }
+
+    Boolean delete(UUID id) {
+        Integer deletedRows = 0
+
+        sql.withTransaction {
+            deletedRows = sql.executeUpdate("DELETE FROM raffles WHERE id = ?", id)
+        }
+
+        return deletedRows == 1
+    }
 }
