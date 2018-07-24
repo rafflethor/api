@@ -3,10 +3,12 @@ package io.rafflethor.organization
 import javax.inject.Inject
 import groovy.sql.GroovyRowResult
 import groovy.sql.Sql
+import groovy.util.logging.Slf4j
 
 import io.rafflethor.db.Utils
 import io.rafflethor.raffle.Raffle
 
+@Slf4j
 class RepositoryImpl implements Repository {
 
     @Inject
@@ -77,4 +79,18 @@ class RepositoryImpl implements Repository {
 
         return toOrganization(row)
     }
+
+    Boolean delete(UUID id) {
+        Integer deletedRows = 0
+
+        sql.withTransaction { connection ->
+            deletedRows = sql
+                .executeUpdate("DELETE FROM organizations WHERE ID = ?", id)
+        }
+
+        log.info "deleted ${deletedRows}"
+
+        return deletedRows == 1
+    }
+
 }

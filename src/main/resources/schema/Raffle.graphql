@@ -82,6 +82,10 @@ type RaffleResult {
   didIWin: Boolean
 }
 
+type DeleteResult {
+  deleted: Boolean
+}
+
 # All queries
 type Queries {
   # list all raffles created by the current user
@@ -107,6 +111,9 @@ type Mutations {
 
   # saves a new event. Returns the created event
   saveOrganization(organization: SaveOrganizationInput!): Organization
+
+  # deletes a given organization by its id
+  deleteOrganization(id: String!): DeleteResult
 
   # saves a new raffle
   saveRaffle(input: SaveRaffleInput): Raffle

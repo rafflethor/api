@@ -42,4 +42,14 @@ class Service {
 
         return repository.byRaffleId(raffle.id)
     }
+
+    CompletableFuture<Map> delete(DataFetchingEnvironment env) {
+        UUID uuid = UUID.fromString(env.arguments.id.toString())
+
+        return Futures.blocking({
+            return [
+                deleted: repository.delete(uuid)
+            ]
+        })
+    }
 }
