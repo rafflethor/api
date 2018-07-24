@@ -61,6 +61,7 @@ input SaveOrganizationInput {
 }
 
 input SaveRaffleInput {
+  id: String,
   organizationId: String
   name: String!
   type: String!,
@@ -127,6 +128,9 @@ type Mutations {
 
   # deletes a given organization by its id
   deleteRaffle(id: String!): DeleteResult
+
+  # update a given raffle
+  updateRaffle(input: SaveRaffleInput!): Raffle
 }
 
 schema {

@@ -48,4 +48,6 @@ interface Repository {
     Map checkRaffleResult(UUID id, String userHash)
 
     Boolean delete(UUID id)
+
+    Raffle update(Raffle id)
 }

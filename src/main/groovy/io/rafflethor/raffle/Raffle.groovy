@@ -63,4 +63,12 @@ class Raffle {
      *@ since 0.1.0
      */
     Date until
+
+    void setId(String id) {
+        this.id = UUID.fromString(id)
+    }
+
+    void setId(UUID id) {
+        this.id = id
+    }
 }

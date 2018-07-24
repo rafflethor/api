@@ -156,4 +156,23 @@ class RepositoryImpl implements Repository {
 
         return deletedRows == 1
     }
+
+    Raffle update(Raffle raffle) {
+        Map<String, ?> params = [
+            name: raffle.name,
+            noWinners: raffle.noWinners,
+            id: raffle.id
+        ]
+
+        sql.withTransaction {
+            sql.executeUpdate("""
+              UPDATE raffles SET
+                 name = :name,
+                 noWinners = :noWinners
+              WHERE id = :id
+            """, params)
+        }
+
+        return raffle
+    }
 }

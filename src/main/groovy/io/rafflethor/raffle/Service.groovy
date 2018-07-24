@@ -134,4 +134,13 @@ class Service {
             return [deleted: raffleRepository.delete(raffleId)]
         })
     }
+
+    CompletableFuture<Map> update(DataFetchingEnvironment env) {
+        Map<String, ?> input = env.arguments.input as Map<String, ?>
+        Raffle raffle = new Raffle(input?.subMap(Repository.FIELDS))
+
+        return Futures.blocking({
+            return raffleRepository.update(raffle)
+        })
+    }
 }

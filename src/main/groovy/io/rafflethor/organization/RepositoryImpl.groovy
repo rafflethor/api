@@ -92,5 +92,4 @@ class RepositoryImpl implements Repository {
 
         return deletedRows == 1
     }
-
 }
