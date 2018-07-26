@@ -17,3 +17,7 @@ flyway:
     - /migrations
   schemas:
     - public
+
+security:
+  secret: secret
+  algorithm: HMAC256
