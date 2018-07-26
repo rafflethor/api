@@ -3,7 +3,6 @@ package io.rafflethor.judge.twitter
 import javax.inject.Inject
 import javax.inject.Provider
 
-import io.rafflethor.config.Config
 import twitter4j.Twitter
 import twitter4j.TwitterFactory
 import twitter4j.conf.ConfigurationBuilder
@@ -21,16 +20,16 @@ class TwitterProvider implements Provider<Twitter> {
      * @since 0.1.0
      */
     @Inject
-    Config config
+    TwitterConfig config
 
     @Override
     Twitter get() {
         ConfigurationBuilder builder = new ConfigurationBuilder()
             .setDebugEnabled(true)
-            .setOAuthConsumerKey(config.twitter.consumerKey)
-            .setOAuthConsumerSecret(config.twitter.consumerSecret)
-            .setOAuthAccessToken(config.twitter.accessToken)
-            .setOAuthAccessTokenSecret(config.twitter.accessTokenSecret)
+            .setOAuthConsumerKey(config.consumerKey)
+            .setOAuthConsumerSecret(config.consumerSecret)
+            .setOAuthAccessToken(config.accessToken)
+            .setOAuthAccessTokenSecret(config.accessTokenSecret)
 
         return new TwitterFactory(builder.build()).instance
     }

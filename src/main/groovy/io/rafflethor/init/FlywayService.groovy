@@ -7,7 +7,6 @@ import ratpack.service.StartEvent
 
 import javax.inject.Inject
 import javax.sql.DataSource
-import io.rafflethor.config.Config
 
 /**
  * Executes Flyway migration on application's startup
@@ -21,7 +20,7 @@ class FlywayService implements Service {
   DataSource dataSource
 
   @Inject
-  Config config
+  FlywayConfig config
 
   @SuppressWarnings('UnusedMethodParameter')
   void onStart(StartEvent startEvent) {
@@ -30,8 +29,8 @@ class FlywayService implements Service {
     Flyway flyway = new Flyway()
 
     flyway.dataSource = dataSource
-    flyway.locations = config.flyway.migrations
-    flyway.schemas = config.flyway.schemas
+    flyway.locations = config.migrations
+    flyway.schemas = config.schemas
 
     flyway.repair()
     flyway.migrate()

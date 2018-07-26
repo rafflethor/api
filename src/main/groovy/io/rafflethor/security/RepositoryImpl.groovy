@@ -8,7 +8,7 @@ import groovy.sql.Sql
  *
  * @since 0.1.0
  */
-class SecurityRepositoryImpl implements SecurityRepository {
+class RepositoryImpl implements Repository {
 
     /**
      * Access to db
@@ -21,13 +21,12 @@ class SecurityRepositoryImpl implements SecurityRepository {
     /**
      * Gets basic information about a given user
      *
-     * @param username login username
-     * @param password login password
+     * @param credentials
      * @return an instance of {@link User} with id and username
      * @since 0.1.0
      */
     @Override
-    User login(String username, String password) {
+    User login(UserCredentials credentials) {
         String query = '''
       SELECT
         id, username
@@ -39,8 +38,8 @@ class SecurityRepositoryImpl implements SecurityRepository {
     '''
 
         Map user = sql.firstRow(query,
-                                username: username,
-                                password: password,)
+                                username: credentials.username,
+                                password: credentials.password,)
 
         return Optional
             .ofNullable(user)

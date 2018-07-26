@@ -18,10 +18,10 @@ class AlgorithmProvider implements Provider<Algorithm> {
      * @since 0.1.0
      */
     @Inject
-    SecurityAwareConfig config
+    SecurityConfig config
 
     @Override
     Algorithm get() {
-        return Algorithm.HMAC256(config.security.secret)
+        return Algorithm.HMAC256(config.secret)
     }
 }
