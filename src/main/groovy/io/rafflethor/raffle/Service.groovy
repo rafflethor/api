@@ -3,7 +3,6 @@ package io.rafflethor.raffle
 import groovy.json.JsonOutput
 import javax.inject.Inject
 import java.util.concurrent.CompletableFuture
-
 import gql.ratpack.exec.Futures
 import graphql.schema.DataFetchingEnvironment
 

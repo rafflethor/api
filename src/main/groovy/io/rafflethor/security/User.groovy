@@ -1,10 +1,12 @@
 package io.rafflethor.security
 
+import groovy.transform.ToString
 import groovy.transform.Immutable
 
+@ToString
 @Immutable(copyWith = true)
 class User {
-  String id
-  String username
-  String token
+    UUID id
+    String username
+    Set<String> roles = [] as Set
 }

@@ -1,5 +1,7 @@
 package io.rafflethor.organization
 
+import io.rafflethor.security.User
+
 /**
  * @since 0.1.0
  */
@@ -13,11 +15,11 @@ interface Repository {
      * @return a list of {@link Organization} instances
      * @since 0.1.0
      */
-    List<Organization> listAll(Integer max, Integer offset)
+    List<Organization> listAllByUser(User user, Integer max, Integer offset)
 
 
     Organization get(UUID id)
-    Organization save(Organization event)
+    Organization save(Organization event, User user)
     Organization byRaffleId(UUID raffleId)
     Boolean delete(UUID id)
 }

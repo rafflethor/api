@@ -10,5 +10,7 @@ class Module extends AbstractModule {
         bind(AlgorithmProvider).in(Scopes.SINGLETON)
         bind(Service).to(ServiceImpl).in(Scopes.SINGLETON)
         bind(Repository).to(RepositoryImpl).in(Scopes.SINGLETON)
+        bind(JwtTokenProviderHandler).in(Scopes.SINGLETON)
+        bind(JwtTokenCheckerHandler).in(Scopes.SINGLETON)
     }
 }

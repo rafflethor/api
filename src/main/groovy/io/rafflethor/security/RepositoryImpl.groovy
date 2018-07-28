@@ -26,7 +26,7 @@ class RepositoryImpl implements Repository {
      * @since 0.1.0
      */
     @Override
-    User login(UserCredentials credentials) {
+    User login(String username, String password) {
         String query = '''
       SELECT
         id, username
@@ -38,8 +38,26 @@ class RepositoryImpl implements Repository {
     '''
 
         Map user = sql.firstRow(query,
-                                username: credentials.username,
-                                password: credentials.password,)
+                                username: username,
+                                password: password,)
+
+        return Optional
+            .ofNullable(user)
+            .map(this.&mapToUser)
+            .orElse(null) as User
+    }
+
+    User findByUsername(String username) {
+        String query = '''
+          SELECT
+            id, username
+          FROM
+            users
+          WHERE
+            username = :username
+      '''
+
+        Map user = sql.firstRow(query, username: username)
 
         return Optional
             .ofNullable(user)

@@ -13,10 +13,4 @@ interface Service {
      */
     final List<String> FIELDS = ['username', 'password']
 
-    /**
-     * @param env
-     * @return
-     * @since 0.1.0
-     */
-    CompletableFuture<User> login(DataFetchingEnvironment env)
 }

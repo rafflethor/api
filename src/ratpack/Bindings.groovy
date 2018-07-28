@@ -2,7 +2,7 @@ import static ratpack.groovy.Groovy.ratpack
 
 import gql.ratpack.GraphQLModule
 import ratpack.groovy.sql.SqlModule
-
+import ratpack.session.SessionModule
 import io.rafflethor.init.InitModule
 import io.rafflethor.eb.EventBusModule
 import io.rafflethor.db.DataSourceModule
@@ -13,6 +13,7 @@ import io.rafflethor.organization.Module as OrganizationModule
 import io.rafflethor.participant.Module as ParticipantModule
 import io.rafflethor.live.Module as LiveModule
 import io.rafflethor.security.Module as SecurityModule
+import org.pac4j.core.profile.UserProfile
 
 /**
  * BINDINGS
@@ -34,6 +35,7 @@ ratpack {
         module ParticipantModule
         module LiveModule
         module TwitterModule
+        module SessionModule
         module SecurityModule
     }
 }

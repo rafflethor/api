@@ -13,17 +13,4 @@ class ServiceImpl implements Service {
     @Inject
     Repository securityRepository
 
-    @Override
-    CompletableFuture<User> login(DataFetchingEnvironment env) {
-        UserCredentials credentials = new UserCredentials(env.arguments.input.subMap(FIELDS))
-
-        return Futures
-            .blocking { credentials }
-            .applyThen(this.&transformPassword)
-            .applyThen(securityRepository.&login)
-    }
-
-    private UserCredentials transformPassword(UserCredentials source) {
-        return source.copyWith(password: cryptoService.hash(source.password))
-    }
 }

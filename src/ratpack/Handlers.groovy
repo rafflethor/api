@@ -1,21 +1,30 @@
 import static ratpack.groovy.Groovy.ratpack
+import static ratpack.pac4j.RatpackPac4j.authenticator
+import static ratpack.pac4j.RatpackPac4j.requireAuth
 
-import gql.ratpack.GraphQLHandler
 import gql.ratpack.GraphiQLHandler
+import gql.ratpack.GraphQLHandler
 
 import io.rafflethor.cors.CorsHandler
 import io.rafflethor.live.LiveHandler
+import io.rafflethor.security.JwtTokenProviderHandler
+import io.rafflethor.security.JwtTokenCheckerHandler
 
 ratpack {
     handlers {
         all(new CorsHandler())
-        //all(authenticator(new IndirectBasicAuthClient(registry.get(Authenticator))))
+
+        prefix('auth') {
+            post('token', JwtTokenProviderHandler)
+        }
 
         prefix('graphql') {
-            //all(requireAuth(IndirectBasicAuthClient))
+            post(JwtTokenCheckerHandler)
+            post('', GraphQLHandler)
+        }
 
-            post("", GraphQLHandler)
-            get('browser', GraphiQLHandler)
+        prefix('graphiql') {
+            get('', GraphiQLHandler)
         }
 
         prefix('raffle') {

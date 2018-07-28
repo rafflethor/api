@@ -14,7 +14,7 @@ flyway:
     - public
 
 security:
-  secret: secret
+  secret: 12345678901234567890123456789012
   algorithm: HMAC256
 
 twitter:

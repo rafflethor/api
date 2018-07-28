@@ -7,6 +7,7 @@ import groovy.util.logging.Slf4j
 
 import io.rafflethor.db.Utils
 import io.rafflethor.raffle.Raffle
+import io.rafflethor.security.User
 
 @Slf4j
 class RepositoryImpl implements Repository {
@@ -15,9 +16,18 @@ class RepositoryImpl implements Repository {
     Sql sql
 
     @Override
-    List<Organization> listAll(Integer max, Integer offset) {
+    List<Organization> listAllByUser(User user, Integer max, Integer offset) {
+        String query = '''
+          SELECT * FROM
+            organizations
+          WHERE
+            createdBy = ?
+          ORDER BY
+            createdAt DESC
+        '''
+
         return sql
-            .rows('SELECT * FROM organizations ORDER BY createdAt DESC', offset, max)
+            .rows(query, [user.id], offset, max)
             .collect(this.&toOrganization)
     }
 
@@ -59,11 +69,11 @@ class RepositoryImpl implements Repository {
     }
 
     @Override
-    Organization save(Organization event) {
+    Organization save(Organization event, User user) {
         UUID uuid = Utils.generateUUID()
 
-        sql.executeInsert("INSERT INTO organizations (id, name, description) VALUES (?, ?, ?)",
-                          [uuid, event.name, event.description])
+        sql.executeInsert("INSERT INTO organizations (id, name, description, createdBy) VALUES (?, ?, ?, ?)",
+                          [uuid, event.name, event.description, user.id])
 
         event.id = uuid
         return event
