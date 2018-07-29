@@ -1,6 +1,4 @@
 import static ratpack.groovy.Groovy.ratpack
-import static ratpack.pac4j.RatpackPac4j.authenticator
-import static ratpack.pac4j.RatpackPac4j.requireAuth
 
 import gql.ratpack.GraphiQLHandler
 import gql.ratpack.GraphQLHandler

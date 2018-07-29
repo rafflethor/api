@@ -1,56 +1,46 @@
 package io.rafflethor.organization
 
-import javax.inject.Inject
 import java.util.concurrent.CompletableFuture
-
 import graphql.schema.DataFetchingEnvironment
-import gql.ratpack.exec.Futures
-import io.rafflethor.raffle.Raffle
 import io.rafflethor.security.User
 
-class Service {
+/**
+ * @since 0.1.0
+ */
+interface Service {
 
-    @Inject
-    Repository repository
+    /**
+     * @param env
+     * @return
+     * @since 0.1.0
+     */
+    CompletableFuture<List<Organization>> listAll(DataFetchingEnvironment env)
 
-    CompletableFuture<List<Organization>> listAll(DataFetchingEnvironment env) {
-        Selectors.ListAll params = Selectors.listAll(env)
+    /**
+     * @param env
+     * @return
+     * @since 0.1.0
+     */
+    CompletableFuture<Organization> get(DataFetchingEnvironment env)
 
-        return Futures.blocking {
-            return repository.listAllByUser(params.user, params.max, params.offset)
-        }
-    }
+    /**
+     * @param env
+     * @return
+     * @since 0.1.0
+     */
+    CompletableFuture<Organization> save(DataFetchingEnvironment env)
 
-    CompletableFuture<Organization> get(DataFetchingEnvironment env) {
-        UUID uuid = getID(env)
+    /**
+     * @param env
+     * @return
+     * @since 0.1.0
+     */
+    Organization byRaffle(DataFetchingEnvironment env)
 
-        return Futures.blocking({
-            return repository.get(uuid)
-        })
-    }
-
-    CompletableFuture<Organization> save(DataFetchingEnvironment env) {
-        User user = Selectors.getUser(env)
-        Organization event = Selectors.getOrganization(env)
-
-        return Futures.blocking {
-            return repository.save(event, user)
-        }
-    }
-
-    Organization byRaffle(DataFetchingEnvironment env) {
-        Raffle raffle = env.getSource()
-
-        return repository.byRaffleId(raffle.id)
-    }
-
-    CompletableFuture<Map> delete(DataFetchingEnvironment env) {
-        UUID uuid = Selectors.getID(env)
-
-        return Futures.blocking({
-            return [
-                deleted: repository.delete(uuid)
-            ]
-        })
-    }
+    /**
+     * @param env
+     * @return
+     * @since 0.1.0
+     */
+    CompletableFuture<Map> delete(DataFetchingEnvironment env)
 }

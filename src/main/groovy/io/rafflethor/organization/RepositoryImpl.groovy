@@ -8,6 +8,7 @@ import groovy.util.logging.Slf4j
 import io.rafflethor.db.Utils
 import io.rafflethor.raffle.Raffle
 import io.rafflethor.security.User
+import io.rafflethor.util.Pagination
 
 @Slf4j
 class RepositoryImpl implements Repository {
@@ -16,7 +17,7 @@ class RepositoryImpl implements Repository {
     Sql sql
 
     @Override
-    List<Organization> listAllByUser(User user, Integer max, Integer offset) {
+    List<Organization> listAll(Pagination pagination, User user) {
         String query = '''
           SELECT * FROM
             organizations
@@ -27,7 +28,7 @@ class RepositoryImpl implements Repository {
         '''
 
         return sql
-            .rows(query, [user.id], offset, max)
+            .rows(query, [user.id], pagination.offset, pagination.max)
             .collect(this.&toOrganization)
     }
 
@@ -36,9 +37,9 @@ class RepositoryImpl implements Repository {
     }
 
     @Override
-    Organization get(UUID uuid) {
+    Organization get(UUID uuid, User user) {
         GroovyRowResult row =  sql
-            .firstRow('SELECT * FROM organizations WHERE id = ?', uuid)
+            .firstRow('SELECT * FROM organizations WHERE id = ? AND createdBy = ?', uuid, user.id)
 
         if (!row) {
             return
@@ -47,7 +48,7 @@ class RepositoryImpl implements Repository {
         Organization organization = this.toOrganization(row)
 
         List<Raffle> rows = sql
-            .rows('SELECT * FROM raffles WHERE organizationId = ?', organization.id)
+            .rows('SELECT * FROM raffles WHERE organizationId = ? AND createdBy = ?', organization.id, user.id)
             .collect(this.&toRaffle)
 
         organization.raffles = rows
@@ -70,32 +71,40 @@ class RepositoryImpl implements Repository {
 
     @Override
     Organization save(Organization event, User user) {
+        String query = '''
+          INSERT INTO organizations
+            (id, name, description, createdBy)
+          VALUES
+            (?, ?, ?, ?)
+        '''
         UUID uuid = Utils.generateUUID()
+        List<?> params = [uuid, event.name, event.description, user.id]
 
-        sql.executeInsert("INSERT INTO organizations (id, name, description, createdBy) VALUES (?, ?, ?, ?)",
-                          [uuid, event.name, event.description, user.id])
-
+        sql.executeInsert(query, params)
         event.id = uuid
+
         return event
     }
 
-    Organization byRaffleId(UUID raffleId) {
+    @Override
+    Organization byRaffleId(UUID raffleId, User user) {
         GroovyRowResult row = sql.firstRow("""
           SELECT * FROM
             organizations
           WHERE
-            id = (SELECT organizationId FROM raffles WHERE id = ?)
-        """, raffleId)
+            id = (SELECT organizationId FROM raffles WHERE id = ?) AND
+            createdBy = ?
+        """, raffleId, user.id)
 
         return toOrganization(row)
     }
 
-    Boolean delete(UUID id) {
+    Boolean delete(UUID id, User user) {
         Integer deletedRows = 0
 
         sql.withTransaction { connection ->
             deletedRows = sql
-                .executeUpdate("DELETE FROM organizations WHERE ID = ?", id)
+                .executeUpdate("DELETE FROM organizations WHERE ID = ? AND createdBy = ?", id, user.id)
         }
 
         log.info "deleted ${deletedRows}"
