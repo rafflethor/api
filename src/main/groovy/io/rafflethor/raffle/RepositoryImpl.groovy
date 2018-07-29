@@ -7,6 +7,7 @@ import groovy.sql.GroovyRowResult
 import groovy.sql.Sql
 
 import io.rafflethor.db.Utils
+import io.rafflethor.util.Pagination
 
 /**
  * Repository to get raffles of twitter nature
@@ -19,9 +20,9 @@ class RepositoryImpl implements Repository {
     Sql sql
 
     @Override
-    List<Raffle> listAll(Integer max, Integer offset) {
+    List<Raffle> listAll(Pagination pagination) {
         return sql
-            .rows("select * from raffles ORDER BY createdAt DESC", offset, max)
+            .rows("select * from raffles ORDER BY createdAt DESC", pagination.offset, pagination.max)
             .collect(this.&toRaffle)
     }
 

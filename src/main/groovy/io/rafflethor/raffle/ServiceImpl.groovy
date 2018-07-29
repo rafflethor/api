@@ -31,49 +31,44 @@ class ServiceImpl implements Service {
 
     @Override
     CompletableFuture<List<Raffle>> listAllRafflesByUser(DataFetchingEnvironment env) {
-        Integer max = env.arguments.max as Integer
-        Integer offset = env.arguments.offset as Integer
+        final Selectors.ListAll params = Selectors.listAll(env)
 
         return Futures.blocking({
-            raffleRepository.listAll(max, offset)
+            raffleRepository.listAll(params.pagination)
         })
     }
 
     @Override
     CompletableFuture<List<Winner>> pickWinners(DataFetchingEnvironment env) {
-        final UUID uuid = UUID.fromString(env.arguments.raffleId as String)
+        final Selectors.PickWinners params = Selectors.pickwinners(env)
 
         return Futures
-            .blocking({ uuid })
+            .blocking({ params.id })
             .thenApply(raffleRepository.&findById)
             .thenApply(twitterJudge.&pickWinners) as CompletableFuture<List<Winner>>
         }
 
     @Override
     CompletableFuture<Raffle> save(DataFetchingEnvironment env) {
-        Map<String, ?> input = env.arguments.input as Map<String, ?>
-        Raffle raffle = new Raffle(input?.subMap(Repository.FIELDS))
-
-        raffle.organizationId = UUID.fromString(env.arguments.input.organizationId as String)
+        final Selectors.Save params = Selectors.save(env)
 
         return Futures.blocking {
-            raffleRepository.save(raffle)
+            raffleRepository.save(params.raffle)
         }
     }
 
     @Override
     CompletableFuture<Map> raffleRegistration(DataFetchingEnvironment env) {
-        final String spotId = env.arguments.spotId as String
-        final String email = env.arguments.email as String
+        final Selectors.Registration params = Selectors.registration(env)
 
-        return Futures.blocking({ spotId })
+        return Futures.blocking({ params.spotId })
             .thenApply(raffleRepository.&findRaffleFromSpot)
             .thenApply({ Raffle raffle ->
-               processRegistration(raffle, spotId, email)
+               processRegistration(raffle, params.spotId, params.email)
             })
     }
 
-    Map processRegistration(Raffle raffle, String spotId, String email) {
+    private Map processRegistration(Raffle raffle, String spotId, String email) {
         return Optional
             .ofNullable(raffle)
             .map({ Raffle raff ->
@@ -84,7 +79,7 @@ class ServiceImpl implements Service {
         }).orElse([:])
     }
 
-    Map processLiveRegistration(Raffle raffle, String email) {
+    private Map processLiveRegistration(Raffle raffle, String email) {
         return Optional
             .ofNullable(email)
             .map({ String mail -> participantRepository.registerUser(raffle.id, mail) })
@@ -93,48 +88,46 @@ class ServiceImpl implements Service {
 
     @Override
     CompletableFuture<Raffle> findById(DataFetchingEnvironment env) {
-        final UUID uuid = UUID.fromString(env.arguments.id)
+        final Selectors.FindById params = Selectors.findById(env)
 
         return Futures.blocking({
-            return raffleRepository.findById(uuid)
+            return raffleRepository.findById(params.id)
         })
     }
 
     @Override
     CompletableFuture<Raffle> startRaffle(DataFetchingEnvironment env) {
-        final UUID uuid = UUID.fromString(env.arguments.id)
+        final Selectors.StartRaffle params = Selectors.startRaffle(env)
 
         return Futures.blocking({
-            return raffleRepository.markRaffleWaiting(uuid)
+            return raffleRepository.markRaffleWaiting(params.id)
         })
     }
 
     @Override
     CompletableFuture<Map> checkRaffleResult(DataFetchingEnvironment env) {
-        UUID raffleId = UUID.fromString(env.arguments.id)
-        String userHash = env.arguments.hash
+        final Selectors.CheckRaffleResult params = Selectors.checkRaffleResult(env)
 
         return Futures.blocking({
-            raffleRepository.checkRaffleResult(raffleId, userHash)
+            raffleRepository.checkRaffleResult(params.id, params.hash)
         })
     }
 
     @Override
     CompletableFuture<Map> delete(DataFetchingEnvironment env) {
-        UUID raffleId = UUID.fromString(env.arguments.id)
+        final Selectors.Delete params = Selectors.delete(env)
 
         return Futures.blocking({
-            return [deleted: raffleRepository.delete(raffleId)]
+            return [deleted: raffleRepository.delete(params.id)]
         })
     }
 
     @Override
     CompletableFuture<Raffle> update(DataFetchingEnvironment env) {
-        Map<String, ?> input = env.arguments.input as Map<String, ?>
-        Raffle raffle = new Raffle(input?.subMap(Repository.FIELDS))
+        final Selectors.Update params = Selectors.update(env)
 
         return Futures.blocking({
-            return raffleRepository.update(raffle)
+            return raffleRepository.update(params.raffle)
         })
     }
 }

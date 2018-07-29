@@ -24,7 +24,7 @@ class Selectors {
     }
 
     static class ByRaffle {
-        Raffle raffle
+        UUID id
         User user
     }
 
@@ -61,7 +61,7 @@ class Selectors {
         Raffle raffle = env.getSource() as Raffle
 
         return new ByRaffle(
-            raffle: raffle?.id,
+            id: raffle?.id,
             user: getUser(env)
         )
     }

@@ -1,5 +1,7 @@
 package io.rafflethor.raffle
 
+import io.rafflethor.util.Pagination
+
 /**
  * Repository to get raffles
  *
@@ -25,12 +27,11 @@ interface Repository {
     /**
      * Lists all raffles
      *
-     * @param max maximum number of results
-     * @param offset the offset of the result
+     * @param pagination
      * @return
      * @since 0.1.0
      */
-    List<Raffle> listAll(Integer max, Integer offset)
+    List<Raffle> listAll(Pagination pagination)
 
     /**
      * Finds a given {@link Raffle} by its id
