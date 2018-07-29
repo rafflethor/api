@@ -1,33 +1,14 @@
 package io.rafflethor.raffle
 
-import groovy.json.JsonOutput
-import javax.inject.Inject
 import java.util.concurrent.CompletableFuture
-import gql.ratpack.exec.Futures
 import graphql.schema.DataFetchingEnvironment
 
-import io.rafflethor.judge.twitter.TwitterJudge
-import io.rafflethor.participant.ParticipantRepository
-import io.rafflethor.eb.EventBusService
-
 /**
- * Service linked to GraphQL queries
+ * Service linked to GraphQL queries and mutations regarding raffles
  *
  * @since 0.1.0
  */
-class Service {
-
-    @Inject
-    Repository raffleRepository
-
-    @Inject
-    ParticipantRepository participantRepository
-
-    @Inject
-    TwitterJudge twitterJudge
-
-    @Inject
-    EventBusService eventBusService
+interface Service {
 
     /**
      * Lists all available raffles
@@ -36,14 +17,7 @@ class Service {
      * @return a {@link CompletableFuture} carrying a list of {@link Raffle}
      * @since 0.1.0
      */
-    CompletableFuture<List<Raffle>> listAllRafflesByUser(DataFetchingEnvironment env) {
-        Integer max = env.arguments.max as Integer
-        Integer offset = env.arguments.offset as Integer
-
-        return Futures.blocking({
-            raffleRepository.listAll(max, offset)
-        })
-    }
+    CompletableFuture<List<Raffle>> listAllRafflesByUser(DataFetchingEnvironment env)
 
     /**
      * Lists all winners from a given raffle
@@ -52,94 +26,69 @@ class Service {
      * @return a {@link CompletableFuture} carrying a list of {@link Winner}
      * @since 0.1.0
      */
-    CompletableFuture<List<Winner>> pickWinners(DataFetchingEnvironment env) {
-        final UUID uuid = UUID.fromString(env.arguments.raffleId as String)
+    CompletableFuture<List<Winner>> pickWinners(DataFetchingEnvironment env)
 
-        return Futures
-            .blocking({ uuid })
-            .thenApply(raffleRepository.&findById)
-            .thenApply(twitterJudge.&pickWinners) as CompletableFuture<List<Winner>>
-        }
+    /**
+     * Saves a new {@link Raffle} with the content found in the
+     * incoming {@link DataFetchingEnvironment}
+     *
+     * @param env data execution environment
+     * @return the saved {@link Raffle} wrapped in a {@link CompletableFuture}
+     * @since 0.1.0
+     */
+    CompletableFuture<Raffle> save(DataFetchingEnvironment env)
 
-    CompletableFuture<Raffle> save(DataFetchingEnvironment env) {
-        Map<String, ?> input = env.arguments.input as Map<String, ?>
-        Raffle raffle = new Raffle(input?.subMap(Repository.FIELDS))
+    /**
+     * Registers a new participant in a given {@link Raffle}
+     *
+     * @param env data execution environment
+     * @return the information about the new participant
+     * @since 0.1.0
+     */
+    CompletableFuture<Map> raffleRegistration(DataFetchingEnvironment env)
 
-        raffle.organizationId = UUID.fromString(env.arguments.input.organizationId as String)
+    /**
+     * Finds a {@link Raffle} by its id
+     *
+     * @param env data execution environment
+     * @return
+     * @since 0.1.0
+     */
+    CompletableFuture<Raffle> findById(DataFetchingEnvironment env)
 
-        return Futures.blocking {
-            raffleRepository.save(raffle)
-        }
-    }
+    /**
+     * Marks a {@link Raffle} as it's been started
+     *
+     * @param env data execution environment
+     * @return the {@link Raffle} initiated
+     * @since 0.1.0
+     */
+    CompletableFuture<Raffle> startRaffle(DataFetchingEnvironment env)
 
-    CompletableFuture<Map> raffleRegistration(DataFetchingEnvironment env) {
-        final String spotId = env.arguments.spotId as String
-        final String email = env.arguments.email as String
+    /**
+     * Checks the result of a given {@link Raffle}
+     *
+     * @param env data execution environment
+     * @return a map containing information about the result of a given {@link Raffle}
+     * @since 0.1.0
+     */
+    CompletableFuture<Map> checkRaffleResult(DataFetchingEnvironment env)
 
-        return Futures.blocking({ spotId })
-            .thenApply(raffleRepository.&findRaffleFromSpot)
-            .thenApply({ Raffle raffle ->
-               processRegistration(raffle, spotId, email)
-            })
-    }
+    /**
+     * Deletes a specific {@link Raffle} by its id
+     *
+     * @param env data execution environment
+     * @return a map containing information about the deletion process
+     * @since 0.1.0
+     */
+    CompletableFuture<Map> delete(DataFetchingEnvironment env)
 
-    Map processRegistration(Raffle raffle, String spotId, String email) {
-        return Optional
-            .ofNullable(raffle)
-            .map({ Raffle raff ->
-                switch (raff.type) {
-                  case 'TWITTER': return participantRepository.registerUser(raff.id, email)
-                  case 'LIVE': return processLiveRegistration(raff, email)
-                }
-        }).orElse([:])
-    }
-
-    Map processLiveRegistration(Raffle raffle, String email) {
-        return Optional
-            .ofNullable(email)
-            .map({ String mail -> participantRepository.registerUser(raffle.id, mail) })
-            .orElse([raffleId: raffle.id])
-    }
-
-    CompletableFuture<Map> findById(DataFetchingEnvironment env) {
-        final UUID uuid = UUID.fromString(env.arguments.id)
-
-        return Futures.blocking({
-            return raffleRepository.findById(uuid)
-        })
-    }
-
-    CompletableFuture<Map> startRaffle(DataFetchingEnvironment env) {
-        final UUID uuid = UUID.fromString(env.arguments.id)
-
-        return Futures.blocking({
-            return raffleRepository.markRaffleWaiting(uuid)
-        })
-    }
-
-    CompletableFuture<Map> checkRaffleResult(DataFetchingEnvironment env) {
-        UUID raffleId = UUID.fromString(env.arguments.id)
-        String userHash = env.arguments.hash
-
-        return Futures.blocking({
-            raffleRepository.checkRaffleResult(raffleId, userHash)
-        })
-    }
-
-    CompletableFuture<Map> delete(DataFetchingEnvironment env) {
-        UUID raffleId = UUID.fromString(env.arguments.id)
-
-        return Futures.blocking({
-            return [deleted: raffleRepository.delete(raffleId)]
-        })
-    }
-
-    CompletableFuture<Map> update(DataFetchingEnvironment env) {
-        Map<String, ?> input = env.arguments.input as Map<String, ?>
-        Raffle raffle = new Raffle(input?.subMap(Repository.FIELDS))
-
-        return Futures.blocking({
-            return raffleRepository.update(raffle)
-        })
-    }
+    /**
+     * Updates a specific {@link Raffle}
+     *
+     * @param env data execution environment
+     * @return the updated {@link Raffle}
+     * @since 0.1.0
+     */
+    CompletableFuture<Raffle> update(DataFetchingEnvironment env)
 }

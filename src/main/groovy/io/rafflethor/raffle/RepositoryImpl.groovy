@@ -78,24 +78,28 @@ class RepositoryImpl implements Repository {
             .orElse(null)
     }
 
+    @Override
     Raffle markRaffleWaiting(UUID id) {
         sql.executeUpdate("UPDATE raffles SET status = 'WAITING' WHERE id = ?", id)
 
         return findById(id)
     }
 
+    @Override
     Raffle markRaffleLive(UUID id) {
         sql.executeUpdate("UPDATE raffles SET status = 'LIVE' WHERE id = ?", id)
 
         return findById(id)
     }
 
+    @Override
     Raffle markRaffleFinished(UUID id) {
         sql.executeUpdate("UPDATE raffles SET status = 'FINISHED' WHERE id = ?", id)
 
         return findById(id)
     }
 
+    @Override
     Raffle findWaitingRaffle() {
         return toRaffle(sql.firstRow("SELECT * FROM raffles WHERE status = 'WAITING'"))
     }
@@ -116,6 +120,7 @@ class RepositoryImpl implements Repository {
         return sql.rows("SELECT * FROM winners WHERE raffleId = ?", raffle.id)
     }
 
+    @Override
     List<Map> findAllRandomWinners(Raffle raffle) {
         List<Map> participants =  sql
             .rows("SELECT * FROM participants WHERE raffleId = ?", raffle.id)
@@ -127,6 +132,7 @@ class RepositoryImpl implements Repository {
         return winners
     }
 
+    @Override
     Map checkRaffleResult(UUID id, String userHash) {
         Raffle raffle = findById(id)
         List<Map> winners = sql.rows("""
@@ -147,6 +153,7 @@ class RepositoryImpl implements Repository {
         ]
     }
 
+    @Override
     Boolean delete(UUID id) {
         Integer deletedRows = 0
 
@@ -157,6 +164,7 @@ class RepositoryImpl implements Repository {
         return deletedRows == 1
     }
 
+    @Override
     Raffle update(Raffle raffle) {
         Map<String, ?> params = [
             name: raffle.name,

@@ -17,6 +17,11 @@ class Raffle {
      */
     UUID id
 
+    /**
+     * Organization the raffle belongs to
+     *
+     * @since 0.1.0
+     */
     UUID organizationId
 
     /**
