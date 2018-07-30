@@ -39,6 +39,9 @@ class JwtTokenProviderHandler implements Handler {
     }
 
     private Map<String, ?> getPayload(User u) {
-        return [token: cryptoService.createToken(u)]
+        return [
+            username: u.username,
+            token: cryptoService.createToken(u)
+        ]
     }
 }
