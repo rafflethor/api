@@ -8,6 +8,7 @@ import groovy.sql.Sql
 
 import io.rafflethor.db.Utils
 import io.rafflethor.util.Pagination
+import io.rafflethor.security.User
 
 /**
  * Repository to get raffles of twitter nature
@@ -20,16 +21,25 @@ class RepositoryImpl implements Repository {
     Sql sql
 
     @Override
-    List<Raffle> listAll(Pagination pagination) {
+    List<Raffle> listAll(Pagination pagination, User user) {
+        String query = '''
+          SELECT * FROM
+            raffles
+          WHERE
+            createdBy = ?
+          ORDER BY
+            createdAt DESC
+        '''
+
         return sql
-            .rows("select * from raffles ORDER BY createdAt DESC", pagination.offset, pagination.max)
+            .rows(query, [user.id], pagination.offset, pagination.max)
             .collect(this.&toRaffle)
     }
 
     @Override
-    Raffle findById(UUID id) {
+    Raffle findById(UUID id, User user) {
         Raffle raffle = sql
-            .rows("select * from raffles where id = :id", id: id)
+            .rows("select * from raffles where id = :id and createdBy = :createdBy", id: id, createdBy: user.id)
             .collect(this.&toRaffle)
             .find()
 
@@ -37,16 +47,16 @@ class RepositoryImpl implements Repository {
     }
 
     @Override
-    Raffle save(Raffle raffle) {
+    Raffle save(Raffle raffle, User user) {
         UUID uuid = Utils.generateUUID()
         raffle.id = uuid
 
         sql.executeInsert("""
           INSERT INTO raffles
-            (id, name, type, noWinners, organizationId)
+            (id, name, type, noWinners, organizationId, createdBy)
           VALUES
-            (?, ?, ?, ?, ?)
-        """, raffle.id, raffle.name, raffle.type, raffle.noWinners, raffle.organizationId)
+            (?, ?, ?, ?, ?, ?)
+        """, raffle.id, raffle.name, raffle.type, raffle.noWinners, raffle.organizationId, user.id)
 
         return raffle
     }
@@ -80,8 +90,8 @@ class RepositoryImpl implements Repository {
     }
 
     @Override
-    Raffle markRaffleWaiting(UUID id) {
-        sql.executeUpdate("UPDATE raffles SET status = 'WAITING' WHERE id = ?", id)
+    Raffle markRaffleWaiting(UUID id, User user) {
+        sql.executeUpdate("UPDATE raffles SET status = 'WAITING' WHERE id = ? and createdBy = ?", id, user.id)
 
         return findById(id)
     }
@@ -155,22 +165,23 @@ class RepositoryImpl implements Repository {
     }
 
     @Override
-    Boolean delete(UUID id) {
+    Boolean delete(UUID id, User user) {
         Integer deletedRows = 0
 
         sql.withTransaction {
-            deletedRows = sql.executeUpdate("DELETE FROM raffles WHERE id = ?", id)
+            deletedRows = sql.executeUpdate("DELETE FROM raffles WHERE id = ? AND createdBy = ?", id, user.id)
         }
 
         return deletedRows == 1
     }
 
     @Override
-    Raffle update(Raffle raffle) {
+    Raffle update(Raffle raffle, User user) {
         Map<String, ?> params = [
             name: raffle.name,
             noWinners: raffle.noWinners,
-            id: raffle.id
+            id: raffle.id,
+            createdBy: user.id
         ]
 
         sql.withTransaction {
@@ -178,7 +189,9 @@ class RepositoryImpl implements Repository {
               UPDATE raffles SET
                  name = :name,
                  noWinners = :noWinners
-              WHERE id = :id
+              WHERE
+                id = :id AND
+                createdBy = :createdBy
             """, params)
         }
 

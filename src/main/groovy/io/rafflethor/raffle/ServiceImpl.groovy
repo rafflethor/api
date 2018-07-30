@@ -34,7 +34,7 @@ class ServiceImpl implements Service {
         final Selectors.ListAll params = Selectors.listAll(env)
 
         return Futures.blocking({
-            raffleRepository.listAll(params.pagination)
+            raffleRepository.listAll(params.pagination, params.user)
         })
     }
 
@@ -53,7 +53,7 @@ class ServiceImpl implements Service {
         final Selectors.Save params = Selectors.save(env)
 
         return Futures.blocking {
-            raffleRepository.save(params.raffle)
+            raffleRepository.save(params.raffle, params.user)
         }
     }
 
@@ -91,7 +91,7 @@ class ServiceImpl implements Service {
         final Selectors.FindById params = Selectors.findById(env)
 
         return Futures.blocking({
-            return raffleRepository.findById(params.id)
+            return raffleRepository.findById(params.id, params.user)
         })
     }
 
@@ -100,7 +100,7 @@ class ServiceImpl implements Service {
         final Selectors.StartRaffle params = Selectors.startRaffle(env)
 
         return Futures.blocking({
-            return raffleRepository.markRaffleWaiting(params.id)
+            return raffleRepository.markRaffleWaiting(params.id, params.user)
         })
     }
 
@@ -118,7 +118,7 @@ class ServiceImpl implements Service {
         final Selectors.Delete params = Selectors.delete(env)
 
         return Futures.blocking({
-            return [deleted: raffleRepository.delete(params.id)]
+            return [deleted: raffleRepository.delete(params.id, params.user)]
         })
     }
 
@@ -127,7 +127,7 @@ class ServiceImpl implements Service {
         final Selectors.Update params = Selectors.update(env)
 
         return Futures.blocking({
-            return raffleRepository.update(params.raffle)
+            return raffleRepository.update(params.raffle, params.user)
         })
     }
 }

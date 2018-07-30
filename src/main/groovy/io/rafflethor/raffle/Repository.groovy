@@ -1,6 +1,7 @@
 package io.rafflethor.raffle
 
 import io.rafflethor.util.Pagination
+import io.rafflethor.security.User
 
 /**
  * Repository to get raffles
@@ -28,18 +29,20 @@ interface Repository {
      * Lists all raffles
      *
      * @param pagination
+     * @param user
      * @return
      * @since 0.1.0
      */
-    List<Raffle> listAll(Pagination pagination)
+    List<Raffle> listAll(Pagination pagination, User user)
 
     /**
      * Finds a given {@link Raffle} by its id
      *
      * @param id the identifier of the raffle
+     * @param user who created the raffle
      * @since 0.1.0
      */
-    Raffle findById(UUID id)
+    Raffle findById(UUID id, User user)
 
     /**
      * Finds a given {@link Raffle} by the spot assigned to it
@@ -54,19 +57,22 @@ interface Repository {
      * Saves a given {@link Raffle}
      *
      * @param raffle the raffle we would like to save
+     * @param user user saving the raffle
      * @return the saved {@link Raffle}
      * @since 0.1.0
      */
-    Raffle save(Raffle raffle)
+    Raffle save(Raffle raffle, User user)
 
     /**
-     * Marks a raffle as ready to start (WAITING)
+     * Marks a raffle as ready to start (WAITING). Only the user who
+     * created the raffle can mark the raffle as WAITING.
      *
      * @param id the id of the {@link Raffle}
+     * @param user the user who created the raffle
      * @return the updated {@link Raffle}
      * @since 0.1.0
      */
-    Raffle markRaffleWaiting(UUID id)
+    Raffle markRaffleWaiting(UUID id, User user)
 
     /**
      * Marks a raffle as LIVE
@@ -120,18 +126,20 @@ interface Repository {
      * Deletes the {@link Raffle} with the id passed as argument
      *
      * @param id the id of the {@link Raffle} we would like to delete
+     * @param user the user who created the raffle
      * @return true if the {@link Raffle} has been removed, false otherwise
      * @since 0.1.0
      */
-    Boolean delete(UUID id)
+    Boolean delete(UUID id, User user)
 
     /**
      * Updates a {@link Raffle} with the information contained
      * in the raffle passed as argument
      *
      * @param raffle raffle containing the information to update
+     * @param user the user who created the raffle
      * @return the updated raffle
      * @since 0.1.0
      */
-    Raffle update(Raffle raffle)
+    Raffle update(Raffle raffle, User user)
 }

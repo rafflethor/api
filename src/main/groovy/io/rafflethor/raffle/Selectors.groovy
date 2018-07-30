@@ -1,8 +1,11 @@
 package io.rafflethor.raffle
 
+import ratpack.handling.Context
+
 import groovy.transform.Immutable
 import graphql.schema.DataFetchingEnvironment
 import io.rafflethor.util.Pagination
+import io.rafflethor.security.User
 
 /**
  * Functions reponsible to gather information from the GraphQL
@@ -19,12 +22,7 @@ class Selectors {
      */
     @Immutable
     static class ListAll {
-
-        /**
-         * Information to paginate the raffle list
-         *
-         * @since 0.1.0
-         */
+        User user
         Pagination pagination
     }
 
@@ -36,9 +34,11 @@ class Selectors {
     /**
      * @since 0.1.0
      */
-    @Immutable
+    // TODO make it immutable. At the moment is not possible
+    // because Raffle is not immutable
     static class Save {
         Raffle raffle
+        User user
     }
 
     /**
@@ -56,6 +56,7 @@ class Selectors {
     @Immutable
     static class FindById {
         UUID id
+        User user
     }
 
     /**
@@ -64,6 +65,7 @@ class Selectors {
     @Immutable
     static class StartRaffle {
         UUID id
+        User user
     }
 
     /**
@@ -81,10 +83,16 @@ class Selectors {
     @Immutable
     static class Delete {
         UUID id
+        User user
     }
 
+    /**
+     * @since 0.1.0
+     */
+    // TODO make it @Immutable (raffle is not immutable)
     static class Update {
         Raffle raffle
+        User user
     }
 
     /**
@@ -97,9 +105,11 @@ class Selectors {
     static ListAll listAll(DataFetchingEnvironment env) {
         Integer max = env.arguments.max as Integer
         Integer offset = env.arguments.offset as Integer
+        User user = getUser(env)
 
         return new ListAll(
-            pagination: new Pagination(offset: offset, max: max)
+            pagination: new Pagination(offset: offset, max: max),
+            user: user
         )
     }
 
@@ -112,12 +122,14 @@ class Selectors {
     static Save save(DataFetchingEnvironment env) {
         Map<String, ?> input = env.arguments.input as Map<String, ?>
         Raffle raffle = new Raffle(input?.subMap(Repository.FIELDS))
+        User user = getUser(env)
 
         raffle.organizationId = UUID
             .fromString(env.arguments.input.organizationId as String)
 
         return new Save(
-            raffle: raffle
+            raffle: raffle,
+            user: user
         )
     }
 
@@ -133,14 +145,16 @@ class Selectors {
 
     static FindById findById(DataFetchingEnvironment env) {
         final UUID uuid = UUID.fromString(env.arguments.id)
+        final User user = getUser(env)
 
-        return new FindById(id: uuid)
+        return new FindById(id: uuid, user: user)
     }
 
     static StartRaffle startRaffle(DataFetchingEnvironment env) {
         final UUID uuid = UUID.fromString(env.arguments.id)
+        final User user = getUser(env)
 
-        return new StartRaffle(id: uuid)
+        return new StartRaffle(id: uuid, user: user)
     }
 
     static CheckRaffleResult checkRaffleResult(DataFetchingEnvironment env) {
@@ -155,15 +169,24 @@ class Selectors {
 
     static Delete delete(DataFetchingEnvironment env) {
         UUID raffleId = UUID.fromString(env.arguments.id)
+        User user = getUser(env)
 
-        return new Delete(id: raffleId)
+        return new Delete(id: raffleId, user: user)
     }
 
     static Update update(DataFetchingEnvironment env) {
         Map<String, ?> input = env.arguments.input as Map<String, ?>
         Raffle raffle = new Raffle(input?.subMap(Repository.FIELDS))
+        User user = getUser(env)
 
-        return new Update(raffle: raffle)
+        return new Update(raffle: raffle, user: user)
+    }
+
+    static User getUser(DataFetchingEnvironment env) {
+        Context context = env.context as Context
+        User user = context.get(User)
+
+        return user
     }
 
     static UUID id(DataFetchingEnvironment env) {
