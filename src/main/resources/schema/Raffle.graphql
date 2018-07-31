@@ -5,6 +5,8 @@ interface Raffle {
   name: String
   # type of the raffle
   type: String
+  # raffle current status
+  status: String
   # How many winners this raffle has
   noWinners: Int
   # the organization the raffle belongs to
@@ -20,6 +22,8 @@ type TwitterRaffle implements Raffle {
   noWinners: Int
   # type of the raffle
   type: String
+  # raffle current status
+  status: String
   # When the raffle begins
   since: String
   # When the raffle ends
@@ -39,6 +43,8 @@ type RandomListRaffle implements Raffle {
   noWinners: Int
   # type of the raffle
   type: String
+  # raffle current status
+  status: String
   # the organization the raffle belongs to
   organization: Organization
 }

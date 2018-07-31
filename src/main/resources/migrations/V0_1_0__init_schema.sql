@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS raffles (
   type varchar(255),
   payload json,
   organizationId UUID NOT NULL REFERENCES organizations (id) ON DELETE CASCADE,
-  status varchar(50),
+  status varchar(50) NOT NULL DEFAULT 'NEW',
   since timestamp,
   until timestamp,
   createdBy UUID NOT NULL REFERENCES users (id) ON DELETE CASCADE,
