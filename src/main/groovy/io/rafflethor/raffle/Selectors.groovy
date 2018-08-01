@@ -95,6 +95,10 @@ class Selectors {
         User user
     }
 
+    static class FindAllWinners {
+        Raffle raffle
+    }
+
     /**
      * Gathers max and offset from {@link DataFetchingEnvironment} parameter
      *
@@ -187,6 +191,12 @@ class Selectors {
         User user = context.get(User)
 
         return user
+    }
+
+    static FindAllWinners findAllWinners(DataFetchingEnvironment env) {
+        Raffle raffle = env.source as Raffle
+
+        return new FindAllWinners(raffle: raffle)
     }
 
     static UUID id(DataFetchingEnvironment env) {

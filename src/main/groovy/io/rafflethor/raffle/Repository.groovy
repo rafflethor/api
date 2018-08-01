@@ -142,4 +142,13 @@ interface Repository {
      * @since 0.1.0
      */
     Raffle update(Raffle raffle, User user)
+
+    /**
+     * Finds all chosen winners for a given raffle
+     *
+     * @param raffle the raffle we want to get the winners from
+     * @return a list of {@link Winner}
+     * @since 0.1.0
+     */
+    List<Winner> findAllWinners(Raffle raffle)
 }

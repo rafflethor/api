@@ -129,4 +129,11 @@ class ServiceImpl implements Service {
             return raffleRepository.update(params.raffle, params.user)
         })
     }
+
+    @Override
+    List<Winner> findAllRaffleWinners(DataFetchingEnvironment env) {
+        Selectors.FindAllWinners params = Selectors.findAllWinners(env)
+
+        return raffleRepository.findAllWinners(params.raffle)
+    }
 }

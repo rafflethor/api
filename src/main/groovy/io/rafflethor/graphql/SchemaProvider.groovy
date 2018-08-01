@@ -32,10 +32,12 @@ class SchemaProvider implements Provider<GraphQLSchema> {
                 }
 
                 mapType('TwitterRaffle') {
+                    link('winners', raffleService.&findAllRaffleWinners)
                     link('organization', organizationService.&byRaffle)
                 }
 
                 mapType('RandomListRaffle') {
+                    link('winners', raffleService.&findAllRaffleWinners)
                     link('organization', organizationService.&byRaffle)
                 }
 

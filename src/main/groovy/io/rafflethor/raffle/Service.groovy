@@ -91,4 +91,13 @@ interface Service {
      * @since 0.1.0
      */
     CompletableFuture<Raffle> update(DataFetchingEnvironment env)
+
+    /**
+     * Finds all chosen winners for a given raffle
+     *
+     * @param env data execution environment
+     * @return a list of {@link Winner}
+     * @since 0.1.0
+     */
+    List<Winner> findAllRaffleWinners(DataFetchingEnvironment env)
 }

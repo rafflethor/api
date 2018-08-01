@@ -34,7 +34,8 @@ CREATE TABLE IF NOT EXISTS raffle_spot (
 
 CREATE TABLE IF NOT EXISTS participants (
   id UUID NOT NULL PRIMARY KEY,
-  email VARCHAR(255),
+  social VARCHAR(255),
+  nick VARCHAR(255),
   hash varchar(255) NOT NULL,
   raffleId UUID NOT NULL REFERENCES raffles (id) ON DELETE CASCADE
 );
@@ -43,6 +44,7 @@ CREATE TABLE IF NOT EXISTS winners (
   id UUID NOT NULL PRIMARY KEY,
   participantId UUID NOT NULL REFERENCES participants (id),
   raffleId UUID NOT NULL REFERENCES raffles (id) ON DELETE CASCADE,
+  ordering integer,
   createdAt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 

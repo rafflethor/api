@@ -197,4 +197,37 @@ class RepositoryImpl implements Repository {
 
         return raffle
     }
+
+    @Override
+    List<Winner> findAllWinners(Raffle raffle) {
+        String query = '''
+          SELECT
+            w.raffleId,
+            w.ordering,
+            w.id,
+            p.social,
+            p.nick,
+            w.createdAt
+          FROM winners w JOIN participants p ON
+            w.participantId = p.id
+          WHERE w.raffleId = ?
+        '''
+
+        return sql
+            .rows(query, raffle.id)
+            .collect(this.&toWinner)
+    }
+
+    private Winner toWinner(GroovyRowResult row) {
+        List<String> fields = [
+            'id',
+            'ordering',
+            'social',
+            'nick',
+            'raffleId',
+            'createdAt'
+        ]
+
+        return new Winner(row.subMap(fields))
+    }
 }

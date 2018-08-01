@@ -11,6 +11,8 @@ interface Raffle {
   noWinners: Int
   # the organization the raffle belongs to
   organization: Organization
+  # raffle winners
+  winners: [Winner]
 }
 
 # A Raffle that pick winners from a Twitter hashtag
@@ -32,6 +34,8 @@ type TwitterRaffle implements Raffle {
   hashTag: String
   # the organization the raffle belongs to
   organization: Organization
+  # raffle winners
+  winners: [Winner]
 }
 
 # A Raffle that pick winners from a list randomly
@@ -47,11 +51,16 @@ type RandomListRaffle implements Raffle {
   status: String
   # the organization the raffle belongs to
   organization: Organization
+  # raffle winners
+  winners: [Winner]
 }
 
 type Winner {
-  email: String
-  hash: String
+  id: String
+  ordering: Int
+  nick: String
+  social: String
+  createdAt: String
 }
 
 type Organization {
