@@ -1,0 +1,114 @@
+# Base type for Raffles
+interface Raffle {
+  # internal id of the raffle
+  id: String
+
+  # name of the raffle
+  name: String
+
+  # type of the raffle
+  type: String
+
+  # raffle current status
+  status: String
+
+  # How many winners this raffle has
+  noWinners: Int
+
+  # the organization the raffle belongs to
+  organization: Organization
+
+  # raffle winners
+  winners: [Winner]
+}
+
+# A Raffle that pick winners from a Twitter hashtag
+type TwitterRaffle implements Raffle {
+  # internal id of the raffle
+  id: String
+
+  # name of the raffle
+  name: String
+
+  # How many winners this raffle has
+  noWinners: Int
+
+  # type of the raffle
+  type: String
+
+  # raffle current status
+  status: String
+
+  # the organization the raffle belongs to
+  organization: Organization
+
+  # raffle winners
+  winners: [Winner]
+
+  # When the raffle begins
+  since: String
+
+  # When the raffle ends
+  until: String
+
+  # Users Tweeting with this hashTag are eligible to win
+  hashTag: String
+}
+
+# A Raffle that pick winners from a list randomly
+type RandomListRaffle implements Raffle {
+  # internal id of the raffle
+  id: String
+
+  # name of the raffle
+  name: String
+
+  # How many winners this raffle has
+  noWinners: Int
+
+  # type of the raffle
+  type: String
+
+  # raffle current status
+  status: String
+
+  # the organization the raffle belongs to
+  organization: Organization
+
+  # raffle winners
+  winners: [Winner]
+}
+
+# event or organization organizing raffles
+type Organization {
+  # id of the organization
+  id: String
+
+  # name of the organization or event
+  name: String
+
+  # description of the event
+  description: String
+
+  # raffles beloging to this organization
+  raffles: [Raffle]
+}
+
+
+# represents the winner of a given raffle
+type Winner {
+  # internal id of the winner
+  id: String
+
+  # which is its position in the raffle
+  ordering: Int
+
+  # Nickname to identify the winner
+  nick: String
+
+  # social account used to participate in the raffle
+  social: String
+
+  # when the winner won the raffle
+  createdAt: String
+}

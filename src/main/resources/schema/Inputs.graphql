@@ -1,0 +1,31 @@
+input SaveOrganizationInput {
+  name: String!
+  description: String!
+}
+
+input SaveRaffleInput {
+  id: String,
+  organizationId: String
+  name: String!
+  type: String!,
+  noWinners: Int!
+  payload: String
+  since: String
+  until: String
+}
+
+type RaffleRegistration {
+  hash: String
+  raffleId: String,
+  email: String
+}
+
+type RaffleResult {
+  raffle: Raffle
+  winners: [Winner]
+  didIWin: Boolean
+}
+
+type DeleteResult {
+  deleted: Boolean
+}
