@@ -74,7 +74,7 @@ class RepositoryImpl implements Repository {
              :name,
              :type,
              :noWinners,
-             true,
+             :preventPreviousWinners,
              :organizationId,
              :since,
              :until,
@@ -84,6 +84,7 @@ class RepositoryImpl implements Repository {
              name = :name,
              type = :type,
              noWinners = :noWinners,
+             preventPreviousWinners = :preventPreviousWinners,
              since = :since,
              until = :until,
              payload = :payload::JSON
