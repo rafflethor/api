@@ -1,10 +1,17 @@
 package io.rafflethor.raffle
 
+import static io.rafflethor.db.Utils.toTimestamp
+import static groovy.json.JsonOutput.toJson
+import static groovy.json.JsonOutput.unescaped
+
 import javax.inject.Inject
 import java.sql.Timestamp
+import java.sql.Connection
+
+import groovy.sql.Sql
 import groovy.sql.BatchingStatementWrapper
 import groovy.sql.GroovyRowResult
-import groovy.sql.Sql
+import groovy.json.JsonOutput
 
 import io.rafflethor.db.Utils
 import io.rafflethor.util.Pagination
@@ -33,48 +40,73 @@ class RepositoryImpl implements Repository {
 
         return sql
             .rows(query, [user.id], pagination.offset, pagination.max)
-            .collect(this.&toRaffle)
+            .collect(Raffles.&toRaffle)
     }
 
     @Override
     Raffle findById(UUID id, User user) {
         Raffle raffle = sql
             .rows("select * from raffles where id = :id and createdBy = :createdBy", id: id, createdBy: user.id)
-            .collect(this.&toRaffle)
+            .collect(Raffles.&toRaffle)
             .find()
 
         return raffle
     }
 
     @Override
-    Raffle save(Raffle raffle, User user) {
-        UUID uuid = Utils.generateUUID()
-        raffle.id = uuid
+    Raffle upsert(Raffle raffle, User user) {
+        raffle.id = raffle.id ?: Utils.generateUUID()
 
-        sql.executeInsert("""
+        List<GroovyRowResult> rows = sql.executeInsert('''
           INSERT INTO raffles
-            (id, name, type, noWinners, organizationId, createdBy)
+            (id,
+             name,
+             type,
+             noWinners,
+             preventPreviousWinners,
+             organizationId,
+             since,
+             until,
+             payload,
+             createdBy)
           VALUES
-            (?, ?, ?, ?, ?, ?)
-        """, raffle.id, raffle.name, raffle.type, raffle.noWinners, raffle.organizationId, user.id)
+            (:id,
+             :name,
+             :type,
+             :noWinners,
+             true,
+             :organizationId,
+             :since,
+             :until,
+             :payload::JSON,
+             :createdBy)
+          ON CONFLICT (id) DO UPDATE SET
+             name = :name,
+             type = :type,
+             noWinners = :noWinners,
+             since = :since,
+             until = :until,
+             payload = :payload::JSON
+          WHERE
+             raffles.createdBy = :createdBy
+          RETURNING id, name, type, noWinners, preventPreviousWinners, organizationId, since, until, payload, status
+        ''', [
+                id: raffle.id,
+                name: raffle.name,
+                type: raffle.type,
+                noWinners: raffle.noWinners,
+                preventPreviousWinners: raffle.preventPreviousWinners,
+                organizationId: raffle.organizationId,
+                since: toTimestamp(raffle.since),
+                until: toTimestamp(raffle.until),
+                payload: raffle.payload,
+                createdBy: user.id
+            ])
 
-        return raffle
-    }
-
-    private static Raffle toRaffle(GroovyRowResult row) {
-        if (!row) {
-            return null
-        }
-
-        String pgObject = row['payload']?.value
-        Map payload = pgObject ?
-            new groovy.json.JsonSlurper().parseText(pgObject) :
-            [:]
-
-        Raffle raffle =  new Raffle(row.subMap(FIELDS))
-
-        raffle.payload = payload
-        return raffle
+        return rows
+            .grep()
+            .collect(Raffles.&toRaffle)
+            .find()
     }
 
     @Override
@@ -112,7 +144,7 @@ class RepositoryImpl implements Repository {
 
     @Override
     Raffle findWaitingRaffle() {
-        return toRaffle(sql.firstRow("SELECT * FROM raffles WHERE status = 'WAITING'"))
+        return Raffles.toRaffle(sql.firstRow("SELECT * FROM raffles WHERE status = 'WAITING'"))
     }
 
     List<Map> saveWinners(Raffle raffle, List<Map> participants) {
@@ -175,27 +207,20 @@ class RepositoryImpl implements Repository {
         return deletedRows == 1
     }
 
-    @Override
-    Raffle update(Raffle raffle, User user) {
-        Map<String, ?> params = [
-            name: raffle.name,
-            noWinners: raffle.noWinners,
-            id: raffle.id,
-            createdBy: user.id
-        ]
+    static <T> T executeTx(Sql sql, Closure<T> expression) {
+        final T result = null
 
-        sql.withTransaction {
-            sql.executeUpdate("""
-              UPDATE raffles SET
-                 name = :name,
-                 noWinners = :noWinners
-              WHERE
-                id = :id AND
-                createdBy = :createdBy
-            """, params)
+        sql.withTransaction { Connection connection ->
+            result = expression(new Sql(connection))
         }
 
+        return result
+    }
+
+    private Map<String,?> params(Raffle raffle) {
         return raffle
+            .properties
+            .subMap(Raffles.FIELDS)
     }
 
     @Override

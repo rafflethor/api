@@ -125,7 +125,7 @@ class Selectors {
 
     static Save save(DataFetchingEnvironment env) {
         Map<String, ?> input = env.arguments.input as Map<String, ?>
-        Raffle raffle = new Raffle(input?.subMap(Repository.FIELDS))
+        Raffle raffle = new Raffle(input?.subMap(Raffles.FIELDS))
         User user = getUser(env)
 
         raffle.organizationId = UUID
@@ -180,7 +180,7 @@ class Selectors {
 
     static Update update(DataFetchingEnvironment env) {
         Map<String, ?> input = env.arguments.input as Map<String, ?>
-        Raffle raffle = new Raffle(input?.subMap(Repository.FIELDS))
+        Raffle raffle = new Raffle(input?.subMap(Raffles.FIELDS))
         User user = getUser(env)
 
         return new Update(raffle: raffle, user: user)

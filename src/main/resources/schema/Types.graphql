@@ -15,6 +15,9 @@ interface Raffle {
   # How many winners this raffle has
   noWinners: Int
 
+  # whether to prevent previous winners to participate or not
+  preventPreviousWinners: Boolean
+
   # the organization the raffle belongs to
   organization: Organization
 
@@ -32,6 +35,9 @@ type TwitterRaffle implements Raffle {
 
   # How many winners this raffle has
   noWinners: Int
+
+  # whether to prevent previous winners to participate or not
+  preventPreviousWinners: Boolean
 
   # type of the raffle
   type: String
@@ -52,7 +58,7 @@ type TwitterRaffle implements Raffle {
   until: String
 
   # Users Tweeting with this hashTag are eligible to win
-  hashTag: String
+  hashtag: String
 }
 
 # A Raffle that pick winners from a list randomly
@@ -65,6 +71,9 @@ type RandomListRaffle implements Raffle {
 
   # How many winners this raffle has
   noWinners: Int
+
+  # whether to prevent previous winners to participate or not
+  preventPreviousWinners: Boolean
 
   # type of the raffle
   type: String

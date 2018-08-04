@@ -7,6 +7,7 @@ import groovy.util.logging.Slf4j
 
 import io.rafflethor.db.Utils
 import io.rafflethor.raffle.Raffle
+import io.rafflethor.raffle.Raffles
 import io.rafflethor.security.User
 import io.rafflethor.util.Pagination
 
@@ -49,24 +50,11 @@ class RepositoryImpl implements Repository {
 
         List<Raffle> rows = sql
             .rows('SELECT * FROM raffles WHERE organizationId = ? AND createdBy = ?', organization.id, user.id)
-            .collect(this.&toRaffle)
+            .collect(Raffles.&toRaffle)
 
         organization.raffles = rows
 
         return organization
-    }
-
-    private static Raffle toRaffle(GroovyRowResult row) {
-        List<String> RAFFLE_FIELDS = ['id', 'name', 'noWinners', 'status', 'type', 'until', 'since']
-        Raffle raffle =  new Raffle(row.subMap(RAFFLE_FIELDS))
-
-        String pgObject = row['payload']?.value
-        Map payload = pgObject ?
-            new groovy.json.JsonSlurper().parseText(pgObject) :
-            [:]
-
-        raffle.payload = payload
-        return raffle
     }
 
     @Override

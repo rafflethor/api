@@ -17,12 +17,14 @@ CREATE TABLE IF NOT EXISTS raffles (
   id UUID NOT NULL PRIMARY KEY,
   name VARCHAR(255),
   noWinners INT,
+  preventPreviousWinners boolean NOT NULL,
   type varchar(255),
-  payload json,
-  organizationId UUID NOT NULL REFERENCES organizations (id) ON DELETE CASCADE,
-  status varchar(50) NOT NULL DEFAULT 'NEW',
   since timestamp,
   until timestamp,
+  payload json,
+  status varchar(50) NOT NULL DEFAULT 'NEW',
+  finishedAt timestamp,
+  organizationId UUID NOT NULL REFERENCES organizations (id) ON DELETE CASCADE,
   createdBy UUID NOT NULL REFERENCES users (id) ON DELETE CASCADE,
   createdAt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

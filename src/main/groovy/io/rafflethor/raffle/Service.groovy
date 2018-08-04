@@ -100,4 +100,13 @@ interface Service {
      * @since 0.1.0
      */
     List<Winner> findAllRaffleWinners(DataFetchingEnvironment env)
+
+    /**
+     * Extracts the hashtag from the raffle payload
+     *
+     * @param env data execution environment
+     * @return the hashtag found in the payload map
+     * @since 0.1.0
+     */
+    String extractHashtag(DataFetchingEnvironment env)
 }

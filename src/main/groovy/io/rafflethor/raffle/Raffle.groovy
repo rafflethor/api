@@ -1,6 +1,10 @@
 package io.rafflethor.raffle
 
+import static groovy.json.JsonOutput.toJson
+
 import groovy.transform.ToString
+import java.sql.Timestamp
+import java.time.LocalDateTime
 
 /**
  * Base class for all raffles
@@ -39,6 +43,14 @@ class Raffle {
     Integer noWinners
 
     /**
+     * Whether to prevent or not previous winners to participate in
+     * this raffle
+     *
+     * @since 0.1.0
+     */
+    Boolean preventPreviousWinners
+
+    /**
      * Type of the {@link Raffle}
      *
      * @since 0.1.0
@@ -53,21 +65,45 @@ class Raffle {
     String status
 
     /**
-     * {@link Raffle} related information
+     * {@link Raffle} related information in JSON
      *
      * @since 0.1.0
      */
-    Map payload
+    String payload
 
     /**
      *@ since 0.1.0
      */
-    Date since
+    LocalDateTime since
 
     /**
      *@ since 0.1.0
      */
-    Date until
+    LocalDateTime until
+
+    void setPayload(Map payload) {
+        this.payload = toJson(payload)
+    }
+
+    void setPayload(org.postgresql.util.PGobject object) {
+        this.payload = object?.value
+    }
+
+    void setSince(Timestamp since) {
+        this.since = since.toLocalDateTime()
+    }
+
+    void setSince(LocalDateTime since) {
+        this.since = since
+    }
+
+    void setUntil(Timestamp until) {
+        this.until = until.toLocalDateTime()
+    }
+
+    void setUntil(LocalDateTime until) {
+        this.until = until
+    }
 
     void setId(String id) {
         this.id = UUID.fromString(id)
@@ -75,5 +111,13 @@ class Raffle {
 
     void setId(UUID id) {
         this.id = id
+    }
+
+    void setOrganizationId(String organizationId) {
+        this.organizationId = UUID.fromString(organizationId)
+    }
+
+    void setOrganizationId(UUID organizationId) {
+        this.organizationId = organizationId
     }
 }

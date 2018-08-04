@@ -11,21 +11,6 @@ import io.rafflethor.security.User
 interface Repository {
 
     /**
-     * Relevant fields of type {@link Raffle}
-     *
-     * @since 0.1.0
-     */
-    static final List<String> FIELDS = [
-        'id',
-        'name',
-        'noWinners',
-        'type',
-        'status',
-        'until',
-        'since'
-    ]
-
-    /**
      * Lists all raffles
      *
      * @param pagination
@@ -54,14 +39,14 @@ interface Repository {
     Raffle findRaffleFromSpot(String spotId)
 
     /**
-     * Saves a given {@link Raffle}
+     * Saves or updates a given {@link Raffle}
      *
      * @param raffle the raffle we would like to save
      * @param user user saving the raffle
      * @return the saved {@link Raffle}
      * @since 0.1.0
      */
-    Raffle save(Raffle raffle, User user)
+    Raffle upsert(Raffle raffle, User user)
 
     /**
      * Marks a raffle as ready to start (WAITING). Only the user who
@@ -131,17 +116,6 @@ interface Repository {
      * @since 0.1.0
      */
     Boolean delete(UUID id, User user)
-
-    /**
-     * Updates a {@link Raffle} with the information contained
-     * in the raffle passed as argument
-     *
-     * @param raffle raffle containing the information to update
-     * @param user the user who created the raffle
-     * @return the updated raffle
-     * @since 0.1.0
-     */
-    Raffle update(Raffle raffle, User user)
 
     /**
      * Finds all chosen winners for a given raffle

@@ -3,15 +3,19 @@ input SaveOrganizationInput {
   description: String!
 }
 
+scalar Payload
+scalar Moment
+
 input SaveRaffleInput {
   id: String,
   organizationId: String
   name: String!
-  type: String!,
+  type: String!
+  preventPreviousWinners: Boolean
   noWinners: Int!
-  payload: String
-  since: String
-  until: String
+  payload: Payload
+  since: Moment
+  until: Moment
 }
 
 type RaffleRegistration {

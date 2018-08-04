@@ -21,26 +21,27 @@ VALUES
    'e8bceac0-905c-11e8-9eb6-529269fb1459');
 
 INSERT INTO raffles
-  (id, name, type, status, noWinners, since, until, payload, organizationId, createdBy)
+  (id, name, type, status, preventPreviousWinners, noWinners, since, until, organizationId, createdBy)
 VALUES
   ('cc00c00e-6a42-11e8-adc0-fa7ae01bbebc',
    'SuperUnconference T-Shirt',
    'LIVE',
    'NEW',
+   FALSE,
    1,
    '2018/05/31',
    '2018/06/06',
-   '{"hashtag": "#groovylang"}',
    '135ef3e0-7c49-11e8-adc0-fa7ae01bbebc',
    'e8bceac0-905c-11e8-9eb6-529269fb1459');
 
 INSERT INTO raffles
-  (id, name, type, status, noWinners, since, until, payload, organizationId, createdBy)
+  (id, name, type, status, preventPreviousWinners, noWinners, since, until, payload, organizationId, createdBy)
 VALUES
   ('cc00c2ac-6a42-11e8-adc0-fa7ae01bbebc',
    'SuperUnconference Free Ticket',
    'TWITTER',
    'NEW',
+   TRUE,
    2,
    '2018/05/31',
    '2018/06/06',

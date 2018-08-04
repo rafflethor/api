@@ -2,6 +2,7 @@ package io.rafflethor.raffle
 
 import javax.inject.Inject
 import java.util.concurrent.CompletableFuture
+import groovy.json.JsonSlurper
 import gql.ratpack.exec.Futures
 import graphql.schema.DataFetchingEnvironment
 
@@ -52,7 +53,7 @@ class ServiceImpl implements Service {
         final Selectors.Save params = Selectors.save(env)
 
         return Futures.blocking {
-            raffleRepository.save(params.raffle, params.user)
+            raffleRepository.upsert(params.raffle, params.user)
         }
     }
 
@@ -126,7 +127,7 @@ class ServiceImpl implements Service {
         final Selectors.Update params = Selectors.update(env)
 
         return Futures.blocking({
-            return raffleRepository.update(params.raffle, params.user)
+            return raffleRepository.upsert(params.raffle, params.user)
         })
     }
 
@@ -135,5 +136,16 @@ class ServiceImpl implements Service {
         Selectors.FindAllWinners params = Selectors.findAllWinners(env)
 
         return raffleRepository.findAllWinners(params.raffle)
+    }
+
+    @Override
+    String extractHashtag(DataFetchingEnvironment env) {
+        Raffle raffle = env.source as Raffle
+
+        return Optional
+            .ofNullable(raffle.payload)
+            .map({ String pay -> new JsonSlurper().parseText(pay) })
+            .map({ Map json -> json.hashtag })
+            .orElse(null)
     }
 }

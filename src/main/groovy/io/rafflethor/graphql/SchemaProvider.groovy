@@ -25,6 +25,8 @@ class SchemaProvider implements Provider<GraphQLSchema> {
     @Override
     GraphQLSchema get() {
         GraphQLSchema schema = DSL.mergeSchemas {
+            scalar(Utils.Payload)
+            scalar(Utils.Moment)
 
             byResource('schema/Types.graphql') {
                 mapType('Raffle') {
@@ -32,6 +34,7 @@ class SchemaProvider implements Provider<GraphQLSchema> {
                 }
                 mapType('TwitterRaffle') {
                     link('winners', raffleService.&findAllRaffleWinners)
+                    link('hashtag', raffleService.&extractHashtag)
                     link('organization', organizationService.&byRaffle)
                 }
                 mapType('RandomListRaffle') {
