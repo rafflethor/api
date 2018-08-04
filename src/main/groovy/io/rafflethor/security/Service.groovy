@@ -1,0 +1,16 @@
+package io.rafflethor.security
+
+import java.util.concurrent.CompletableFuture
+import graphql.schema.DataFetchingEnvironment
+
+/**
+ * @since 0.1.0
+ */
+interface Service {
+
+    /**
+     * @since 0.1.0
+     */
+    final List<String> FIELDS = ['username', 'password']
+
+}

@@ -1,6 +1,6 @@
 package io.rafflethor.raffle
 
-import java.time.LocalDate
+import java.sql.Timestamp
 import groovy.transform.Immutable
 
 /**
@@ -8,33 +8,47 @@ import groovy.transform.Immutable
  *
  * @since 0.1.0
  */
-@Immutable(knownImmutableClasses = [Raffle, LocalDate])
+@Immutable(knownImmutableClasses = [Timestamp])
 class Winner {
+    /**
+     * The raffle the winner has been taken from
+     *
+     * @since 0.1.0
+     */
+    UUID raffleId
+
     /**
      * Unique identifier of the winner
      *
      * @since 0.1.0
      */
-    String id
+    UUID id
+
+    /**
+     * Which position holds when winning
+     *
+     * @since 0.1.0
+     */
+    Integer ordering
 
     /**
      * Human readable name
      *
      * @since 0.1.0
      */
-    String name
+    String nick
+
+    /**
+     * Social account used to connect to the raffle
+     *
+     * @since 0.1.0
+     */
+    String social
 
     /**
      * When the winner has been chosen
      *
      * @since 0.1.0
      */
-    LocalDate when
-
-    /**
-     * The raffle the winner has been taken from
-     *
-     * @since 0.1.0
-     */
-    Raffle raffle
+    Timestamp createdAt
 }

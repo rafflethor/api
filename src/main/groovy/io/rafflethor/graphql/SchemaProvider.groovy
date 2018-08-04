@@ -25,20 +25,27 @@ class SchemaProvider implements Provider<GraphQLSchema> {
     @Override
     GraphQLSchema get() {
         GraphQLSchema schema = DSL.mergeSchemas {
-            byResource('schema/Raffle.graphql') {
+            scalar(Utils.Payload)
+            scalar(Utils.Moment)
 
+            byResource('schema/Types.graphql') {
                 mapType('Raffle') {
                     typeResolver(Utils.raffleTypeResolver())
                 }
-
                 mapType('TwitterRaffle') {
+                    link('winners', raffleService.&findAllRaffleWinners)
+                    link('hashtag', raffleService.&extractHashtag)
                     link('organization', organizationService.&byRaffle)
                 }
-
                 mapType('RandomListRaffle') {
+                    link('winners', raffleService.&findAllRaffleWinners)
                     link('organization', organizationService.&byRaffle)
                 }
+            }
 
+            byResource('schema/Inputs.graphql')
+
+            byResource('schema/Queries.graphql') {
                 mapType('Queries') {
                     link('listAllRaffles', raffleService.&listAllRafflesByUser)
                     link('listAllOrganizations', organizationService.&listAll)
@@ -47,7 +54,9 @@ class SchemaProvider implements Provider<GraphQLSchema> {
                     link('raffle', raffleService.&findById)
                     link('checkRaffleResult', raffleService.&checkRaffleResult)
                 }
+            }
 
+            byResource('schema/Mutations.graphql') {
                 mapType('Mutations') {
                     link('saveOrganization', organizationService.&save)
                     link('deleteOrganization', organizationService.&delete)
@@ -58,6 +67,8 @@ class SchemaProvider implements Provider<GraphQLSchema> {
                     link('updateRaffle', raffleService.&update)
                 }
             }
+
+            byResource('schema/Schema.graphql')
         }
 
         return schema

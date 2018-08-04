@@ -1,0 +1,24 @@
+type Mutations {
+
+  # saves a new event. Returns the created event
+  saveOrganization(organization: SaveOrganizationInput!): Organization
+
+  # deletes a given organization by its id
+  deleteOrganization(id: String!): DeleteResult
+
+  # saves a new raffle
+  saveRaffle(input: SaveRaffleInput): Raffle
+
+  # registers a given user with its email to a given raffle.
+  # The service will return a unique participation hash
+  eventRegistry(spotId: String, email: String): RaffleRegistration
+
+  # Starts a given raffle
+  startRaffle(id: String!): Raffle
+
+  # deletes a given organization by its id
+  deleteRaffle(id: String!): DeleteResult
+
+  # update a given raffle
+  updateRaffle(input: SaveRaffleInput!): Raffle
+}

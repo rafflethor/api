@@ -1,0 +1,20 @@
+# All queries
+type Queries {
+  # list all raffles created by the current user
+  listAllRaffles(max: Int!, offset: Int!): [Raffle]
+
+  # list all events created by the current user
+  listAllOrganizations(max: Int!, offset: Int!): [Organization]
+
+  # Gets the information of a given organization by its id
+  organization(id: String): Organization
+
+  # Gets the information of a given raffle by its id
+  raffle(id: String): Raffle
+
+  # Gets the result of a given raffle
+  checkRaffleResult(id: String!, hash: String!): RaffleResult
+
+  # list all winners from a given raffle
+  pickWinners(raffleId: String): [Winner]
+}

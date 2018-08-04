@@ -1,55 +1,46 @@
 package io.rafflethor.organization
 
-import javax.inject.Inject
 import java.util.concurrent.CompletableFuture
-
 import graphql.schema.DataFetchingEnvironment
-import gql.ratpack.exec.Futures
-import io.rafflethor.raffle.Raffle
+import io.rafflethor.security.User
 
-class Service {
+/**
+ * @since 0.1.0
+ */
+interface Service {
 
-    @Inject
-    Repository repository
+    /**
+     * @param env
+     * @return
+     * @since 0.1.0
+     */
+    CompletableFuture<List<Organization>> listAll(DataFetchingEnvironment env)
 
-    CompletableFuture<List<Organization>> listAll(DataFetchingEnvironment env) {
-        Integer max = env.arguments.max as Integer
-        Integer offset = env.arguments.offset as Integer
+    /**
+     * @param env
+     * @return
+     * @since 0.1.0
+     */
+    CompletableFuture<Organization> get(DataFetchingEnvironment env)
 
-        return Futures.blocking {
-            return repository.listAll(max, offset)
-        }
-    }
+    /**
+     * @param env
+     * @return
+     * @since 0.1.0
+     */
+    CompletableFuture<Organization> save(DataFetchingEnvironment env)
 
-    CompletableFuture<Organization> get(DataFetchingEnvironment env) {
-        UUID uuid = UUID.fromString(env.arguments.id)
+    /**
+     * @param env
+     * @return
+     * @since 0.1.0
+     */
+    Organization byRaffle(DataFetchingEnvironment env)
 
-        return Futures.blocking({
-            return repository.get(uuid)
-        })
-    }
-
-    CompletableFuture<Organization> save(DataFetchingEnvironment env) {
-        Organization event = new Organization(env.arguments.organization.subMap(Repository.FIELDS))
-
-        return Futures.blocking {
-            return repository.save(event)
-        }
-    }
-
-    Organization byRaffle(DataFetchingEnvironment env) {
-        Raffle raffle = env.getSource()
-
-        return repository.byRaffleId(raffle.id)
-    }
-
-    CompletableFuture<Map> delete(DataFetchingEnvironment env) {
-        UUID uuid = UUID.fromString(env.arguments.id.toString())
-
-        return Futures.blocking({
-            return [
-                deleted: repository.delete(uuid)
-            ]
-        })
-    }
+    /**
+     * @param env
+     * @return
+     * @since 0.1.0
+     */
+    CompletableFuture<Map> delete(DataFetchingEnvironment env)
 }

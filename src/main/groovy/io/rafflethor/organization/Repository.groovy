@@ -1,5 +1,8 @@
 package io.rafflethor.organization
 
+import io.rafflethor.security.User
+import io.rafflethor.util.Pagination
+
 /**
  * @since 0.1.0
  */
@@ -13,11 +16,9 @@ interface Repository {
      * @return a list of {@link Organization} instances
      * @since 0.1.0
      */
-    List<Organization> listAll(Integer max, Integer offset)
-
-
-    Organization get(UUID id)
-    Organization save(Organization event)
-    Organization byRaffleId(UUID raffleId)
-    Boolean delete(UUID id)
+    List<Organization> listAll(Pagination pagination, User user)
+    Organization get(UUID id, User user)
+    Organization save(Organization event, User user)
+    Organization byRaffleId(UUID raffleId, User user)
+    Boolean delete(UUID id, User user)
 }

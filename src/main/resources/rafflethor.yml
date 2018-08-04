@@ -1,4 +1,5 @@
-version: 0.1.0
+app:
+  version: 0.1.0
 
 database:
   driverClassName: org.postgresql.Driver
@@ -6,14 +7,18 @@ database:
   username: "rafflethor"
   password: "rafflethor"
 
-twitter:
-  consumerKey:
-  consumerSecret:
-  accessToken:
-  accessTokenSecret:
-
 flyway:
   migrations:
     - /migrations
   schemas:
     - public
+
+security:
+  secret: 12345678901234567890123456789012
+  algorithm: HMAC256
+
+twitter:
+  consumerKey:
+  consumerSecret:
+  accessToken:
+  accessTokenSecret:
