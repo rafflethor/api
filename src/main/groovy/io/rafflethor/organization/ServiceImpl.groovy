@@ -5,6 +5,7 @@ import java.util.concurrent.CompletableFuture
 import graphql.schema.DataFetchingEnvironment
 import gql.ratpack.exec.Futures
 import io.rafflethor.security.User
+import io.rafflethor.raffle.Raffle
 
 class ServiceImpl implements Service {
 
@@ -54,5 +55,12 @@ class ServiceImpl implements Service {
                 deleted: repository.delete(params.id, params.user)
             ]
         })
+    }
+
+    @Override
+    List<Raffle> findAllRaffles(DataFetchingEnvironment env) {
+        Selectors.FindAllRaffles params = Selectors.findAllRaffles(env)
+
+        return repository.findAllRaffles(params.id, params.user)
     }
 }

@@ -41,6 +41,9 @@ class SchemaProvider implements Provider<GraphQLSchema> {
                     link('winners', raffleService.&findAllRaffleWinners)
                     link('organization', organizationService.&byRaffle)
                 }
+                mapType('Organization') {
+                    link('raffles', organizationService.&findAllRaffles)
+                }
             }
 
             byResource('schema/Inputs.graphql')

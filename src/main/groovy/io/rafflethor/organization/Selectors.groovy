@@ -33,6 +33,11 @@ class Selectors {
         User user
     }
 
+    static class FindAllRaffles {
+        UUID id
+        User user
+    }
+
     static ListAll listAll(DataFetchingEnvironment env) {
         return new ListAll(
             user: Selectors.getUser(env),
@@ -81,6 +86,16 @@ class Selectors {
 
     static Organization getOrganization(DataFetchingEnvironment env) {
         return new Organization(env.arguments.organization.subMap(Repository.FIELDS))
+    }
+
+    static FindAllRaffles findAllRaffles(DataFetchingEnvironment env) {
+        Organization organization = env.source as Organization
+        User user = getUser(env)
+
+        return new FindAllRaffles(
+            id: organization?.id,
+            user: user
+        )
     }
 
     static UUID id(DataFetchingEnvironment env) {

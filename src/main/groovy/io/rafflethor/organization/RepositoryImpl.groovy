@@ -34,27 +34,22 @@ class RepositoryImpl implements Repository {
     }
 
     private Organization toOrganization(GroovyRowResult result) {
-        return new Organization(result.subMap(FIELDS))
+        return result ? new Organization(result.subMap(FIELDS)) : null
     }
 
     @Override
     Organization get(UUID uuid, User user) {
-        GroovyRowResult row =  sql
-            .firstRow('SELECT * FROM organizations WHERE id = ? AND createdBy = ?', uuid, user.id)
+        String query = '''
+          SELECT * FROM
+            organizations
+          WHERE
+            id = ? AND
+            createdBy = ?
+        '''
 
-        if (!row) {
-            return
-        }
+        GroovyRowResult row =  sql.firstRow(query, uuid, user.id)
 
-        Organization organization = this.toOrganization(row)
-
-        List<Raffle> rows = sql
-            .rows('SELECT * FROM raffles WHERE organizationId = ? AND createdBy = ?', organization.id, user.id)
-            .collect(Raffles.&toRaffle)
-
-        organization.raffles = rows
-
-        return organization
+        return toOrganization(row)
     }
 
     @Override
@@ -98,5 +93,19 @@ class RepositoryImpl implements Repository {
         log.info "deleted ${deletedRows}"
 
         return deletedRows == 1
+    }
+
+    List<Raffle> findAllRaffles(UUID id, User user) {
+        String query = '''
+          SELECT * FROM
+            raffles
+          WHERE
+            organizationId = ? AND
+            createdBy = ?
+        '''
+
+        return sql
+            .rows(query, id, user.id)
+            .collect(Raffles.&toRaffle)
     }
 }

@@ -1,6 +1,7 @@
 package io.rafflethor.organization
 
 import io.rafflethor.security.User
+import io.rafflethor.raffle.Raffle
 import io.rafflethor.util.Pagination
 
 /**
@@ -21,4 +22,6 @@ interface Repository {
     Organization save(Organization event, User user)
     Organization byRaffleId(UUID raffleId, User user)
     Boolean delete(UUID id, User user)
+
+    List<Raffle> findAllRaffles(UUID id, User user)
 }
