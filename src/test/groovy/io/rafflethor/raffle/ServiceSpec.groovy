@@ -3,12 +3,12 @@ package io.rafflethor.raffle
 import static io.rafflethor.raffle.test.Exec.promise
 
 import graphql.schema.DataFetchingEnvironment
-import org.pac4j.core.profile.UserProfile
 import ratpack.handling.Context
 import ratpack.test.exec.ExecHarness
 import spock.lang.AutoCleanup
 import spock.lang.Specification
-
+import io.rafflethor.security.User
+import io.rafflethor.util.Pagination
 import io.rafflethor.raffle.test.Fixtures
 
 /**
@@ -25,11 +25,11 @@ class ServiceSpec extends Specification {
         given: 'a repository, judge mocks'
         List<Raffle> raffleList = Fixtures.twitterRaffleList()
         Repository repository = Stub(Repository) {
-            listAll(_ as Integer, _ as Integer) >> raffleList
+            listAll(_ as Pagination, _ as User) >> raffleList
         }
 
         and: 'a service implementation'
-        Service service = new Service(raffleRepository: repository)
+        Service service = new ServiceImpl(raffleRepository: repository)
 
         and: 'a valid fetching environment'
         Map<String, Object> arguments = [max: 5, offset: 0]
@@ -55,7 +55,7 @@ class ServiceSpec extends Specification {
      */
     Context getContext() {
         return Stub(Context) {
-            get(UserProfile) >> Fixtures.userProfileWithUsername('john')
+            get(User) >> Fixtures.userWithUsername('john')
         }
     }
 }

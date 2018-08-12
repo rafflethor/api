@@ -1,9 +1,9 @@
 package io.rafflethor.raffle.test
 
 import graphql.schema.DataFetchingEnvironment
-import org.pac4j.core.profile.UserProfile
 import ratpack.handling.Context
 import twitter4j.QueryResult
+import io.rafflethor.security.User
 import io.rafflethor.raffle.Raffle
 
 class Fixtures {
@@ -20,21 +20,6 @@ class Fixtures {
         return new DefaultDataFetchingEnvironment(context: context, arguments: arguments)
     }
 
-    /**
-     * Creates a {@link UserProfile} having a specific username
-     *
-     * @param username the {@link UserProfile} username attribute
-     * @return an instance of {@link UserProfile}
-     * @since 0.1.0
-     */
-    static UserProfile userProfileWithUsername(String username) {
-        UserProfile userProfile = new UserProfile()
-
-        userProfile.addAttribute('username', username)
-
-        return userProfile
-    }
-
     static Raffle twitterRaffle() {
         return new Raffle(
             id: UUID.randomUUID(),
@@ -46,6 +31,10 @@ class Fixtures {
                 hashTag: "#hashTag"
             ]
         )
+    }
+
+    static User userWithUsername(String username) {
+        return new User(username: username)
     }
 
     static List<Raffle> twitterRaffleList() {
