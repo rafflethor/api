@@ -1,4 +1,4 @@
-package io.rafflethor.init
+package io.rafflethor.migration
 
 import groovy.util.logging.Slf4j
 import org.flywaydb.core.Flyway

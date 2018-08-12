@@ -1,4 +1,4 @@
-package io.rafflethor.init
+package io.rafflethor.live
 
 import groovy.util.logging.Slf4j
 import groovy.json.JsonOutput
@@ -23,7 +23,7 @@ import io.rafflethor.raffle.Repository as RaffleRepository
  * @since 0.1.0
  */
 @Slf4j
-class WelcomeNotificationService implements Service {
+class NotificationService implements Service {
 
     @Inject
     EventBusService eventBusService

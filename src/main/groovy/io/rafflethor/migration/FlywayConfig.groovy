@@ -1,4 +1,4 @@
-package io.rafflethor.init
+package io.rafflethor.migration
 
 class FlywayConfig {
     String[] schemas

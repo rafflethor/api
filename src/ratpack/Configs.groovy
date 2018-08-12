@@ -3,7 +3,7 @@ import static ratpack.groovy.Groovy.ratpack
 import ratpack.server.ServerConfigBuilder
 import io.rafflethor.config.AppConfig
 import io.rafflethor.db.DatabaseConfig
-import io.rafflethor.init.FlywayConfig
+import io.rafflethor.migration.FlywayConfig
 import io.rafflethor.security.SecurityConfig
 import io.rafflethor.judge.twitter.TwitterConfig
 

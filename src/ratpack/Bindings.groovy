@@ -2,10 +2,12 @@ import static ratpack.groovy.Groovy.ratpack
 
 import gql.ratpack.GraphQLModule
 import ratpack.groovy.sql.SqlModule
-import io.rafflethor.init.InitModule
+
 import io.rafflethor.eb.EventBusModule
 import io.rafflethor.db.DataSourceModule
 import io.rafflethor.graphql.GraphQLExtraModule
+
+import io.rafflethor.init.Module as InitModule
 import io.rafflethor.judge.twitter.Module as TwitterModule
 import io.rafflethor.raffle.Module as RaffleModule
 import io.rafflethor.organization.Module as OrganizationModule
