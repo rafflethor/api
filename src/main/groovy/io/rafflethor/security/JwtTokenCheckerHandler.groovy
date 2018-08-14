@@ -28,8 +28,13 @@ public class JwtTokenCheckerHandler implements Handler {
      */
     @Override
     public void handle(Context ctx) {
-        Optional<User> user = ctx.header('Authorization')
+        String token = ctx
+            .header('Authorization')
             .map(this.&extractToken)
+            .orElse(ctx.request.queryParams.token)
+
+        Optional<User> user = Optional
+            .ofNullable(token)
             .map(this.&verify)
             .map(this.&buildUser)
 

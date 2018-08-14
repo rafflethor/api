@@ -53,6 +53,18 @@ class RepositoryImpl implements Repository {
         return raffle
     }
 
+    // TODO see if this has to be deleted
+    // it doesnt use any user
+    // it only should be accessed by app processes
+    private Raffle findByIdUnsecured(UUID id) {
+        Raffle raffle = sql
+            .rows("select * from raffles where id = :id", id: id)
+            .collect(Raffles.&toRaffle)
+            .find()
+
+        return raffle
+    }
+
     @Override
     Raffle upsert(Raffle raffle, User user) {
         raffle.id = raffle.id ?: Utils.generateUUID()
@@ -126,21 +138,21 @@ class RepositoryImpl implements Repository {
     Raffle markRaffleWaiting(UUID id, User user) {
         sql.executeUpdate("UPDATE raffles SET status = 'WAITING' WHERE id = ? and createdBy = ?", id, user.id)
 
-        return findById(id)
+        return findById(id, user)
     }
 
     @Override
     Raffle markRaffleLive(UUID id) {
         sql.executeUpdate("UPDATE raffles SET status = 'LIVE' WHERE id = ?", id)
 
-        return findById(id)
+        return findByIdUnsecured(id)
     }
 
     @Override
     Raffle markRaffleFinished(UUID id) {
         sql.executeUpdate("UPDATE raffles SET status = 'FINISHED' WHERE id = ?", id)
 
-        return findById(id)
+        return findByIdUnsecured(id)
     }
 
     @Override
@@ -166,19 +178,22 @@ class RepositoryImpl implements Repository {
 
     @Override
     List<Map> findAllRandomWinners(Raffle raffle) {
+        Integer validWinners = findAllWinners(raffle)
+            .count({ Winner winner -> winner.isValid })
+
         List<Map> participants =  sql
             .rows("SELECT * FROM participants WHERE raffleId = ?", raffle.id)
 
         Collections.shuffle(participants)
-        List<Map> winners = participants.take(raffle.noWinners)
+        List<Map> winners = participants.take(raffle.noWinners - validWinners)
 
         saveWinners(raffle, winners)
-        return winners
+        return findAllWinners(raffle)
     }
 
     @Override
     Map checkRaffleResult(UUID id, String userHash) {
-        Raffle raffle = findById(id)
+        Raffle raffle = findByIdUnsecured(id)
         List<Map> winners = sql.rows("""
           SELECT
             p.hash,
@@ -195,6 +210,29 @@ class RepositoryImpl implements Repository {
             didIWin: didIWin,
             raffle: raffle
         ]
+    }
+
+    @Override
+    List<Winner> markWinnersAsNonValid (List<UUID> winnersIds, UUID raffleId) {
+        String placeHolders = (1..winnersIds.size())
+            .collect { "?" }
+            .join(",")
+
+        String updateQuery = """
+          UPDATE winners SET
+            isValid = false
+          WHERE
+            id in ($placeHolders)
+        """
+
+        List<Winner> winners = []
+
+        sql.withTransaction {
+            sql.executeUpdate(updateQuery, winnersIds)
+            winners = findAllWinners(new Raffle(id: raffleId))
+        }
+
+        return winners
     }
 
     @Override
@@ -233,6 +271,7 @@ class RepositoryImpl implements Repository {
             w.id,
             p.social,
             p.nick,
+            w.isValid,
             w.createdAt
           FROM winners w JOIN participants p ON
             w.participantId = p.id
@@ -251,7 +290,8 @@ class RepositoryImpl implements Repository {
             'social',
             'nick',
             'raffleId',
-            'createdAt'
+            'createdAt',
+            'isValid'
         ]
 
         return new Winner(row.subMap(fields))

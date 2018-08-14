@@ -2,12 +2,12 @@ package io.rafflethor.participant
 
 import com.google.inject.AbstractModule
 import com.google.inject.Scopes
-import io.rafflethor.participant.ParticipantRepository
-import io.rafflethor.participant.ParticipantRepositoryImpl
+import io.rafflethor.participant.Repository
+import io.rafflethor.participant.RepositoryImpl
 
 class Module extends AbstractModule {
     @Override
     protected void configure() {
-        bind(ParticipantRepository).to(ParticipantRepositoryImpl).in(Scopes.SINGLETON)
+        bind(Repository).to(RepositoryImpl).in(Scopes.SINGLETON)
     }
 }

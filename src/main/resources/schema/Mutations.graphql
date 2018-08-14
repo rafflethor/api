@@ -21,4 +21,7 @@ type Mutations {
 
   # update a given raffle
   updateRaffle(input: SaveRaffleInput!): Raffle
+
+  # Marks some winners as invalid
+  markWinnersAsNonValid(input: MarkWinnersAsNonValidInput!): [Winner]
 }

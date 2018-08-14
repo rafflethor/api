@@ -51,4 +51,17 @@ class Winner {
      * @since 0.1.0
      */
     Timestamp createdAt
+
+    /**
+     * A given winner could be marked as non valid because several
+     * reasons, e.g.:
+     *
+     * <ul>
+     *  <li>Not to be present phisically in the raffle</li>
+     *  <li>Not to be able to identify her/him</li>
+     *  <li>...</li>
+     * </ul>
+     * @since 0.1.0
+     */
+    Boolean isValid;
 }

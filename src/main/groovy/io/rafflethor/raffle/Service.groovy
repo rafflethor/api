@@ -109,4 +109,14 @@ interface Service {
      * @since 0.1.0
      */
     String extractHashtag(DataFetchingEnvironment env)
+
+    /**
+     * Marks some selected winners as non valid, whether they were not
+     * present at the raffle or because any other issue.
+     *
+     * @param env data execution environment
+     * @return an updated list of the raffle winners
+     * @since 0.1.0
+     */
+    CompletableFuture<List<Winner>> markWinnersAsNonValid(DataFetchingEnvironment env)
 }

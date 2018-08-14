@@ -29,6 +29,7 @@ class Selectors {
     @Immutable
     static class PickWinners {
         UUID id
+        User user
     }
 
     /**
@@ -99,6 +100,11 @@ class Selectors {
         Raffle raffle
     }
 
+    static class MarkWinnersAsNonValid {
+        List<UUID> winnersIds
+        UUID raffleId
+    }
+
     /**
      * Gathers max and offset from {@link DataFetchingEnvironment} parameter
      *
@@ -118,9 +124,10 @@ class Selectors {
     }
 
     static PickWinners pickWinners(DataFetchingEnvironment env) {
-        return new PickWinners(
-            id: id(env)
-        )
+        UUID id = id(env)
+        User user = getUser(env)
+
+        return new PickWinners(id: id, user: user)
     }
 
     static Save save(DataFetchingEnvironment env) {
@@ -201,5 +208,15 @@ class Selectors {
 
     static UUID id(DataFetchingEnvironment env) {
         return UUID.fromString(env.arguments.raffleId.toString())
+    }
+
+    static MarkWinnersAsNonValid markWinnersAsNonValid(DataFetchingEnvironment env) {
+        Map<String, ?> input = env.arguments.input as Map<String, ?>
+        UUID raffleId = UUID.fromString(input.raffleId)
+        List<UUID> winnersIds = input
+            .winnersIds
+            .collect(UUID.&fromString) as List<UUID>
+
+        return new MarkWinnersAsNonValid(winnersIds: winnersIds, raffleId: raffleId)
     }
 }

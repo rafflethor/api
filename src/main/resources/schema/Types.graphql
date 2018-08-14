@@ -120,4 +120,7 @@ type Winner {
 
   # when the winner won the raffle
   createdAt: String
+
+  # Whether the winner is valid or not
+  isValid: Boolean
 }

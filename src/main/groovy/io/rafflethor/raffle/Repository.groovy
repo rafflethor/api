@@ -125,4 +125,16 @@ interface Repository {
      * @since 0.1.0
      */
     List<Winner> findAllWinners(Raffle raffle)
+
+    /**
+     * Marks a list of winners as non valid using their ids. And
+     * return the information about all the winners once the update
+     * has been done
+     *
+     * @param winnersIds ids of the non valid winners
+     * @param raffleId id of the raffle
+     * @return a list of the non valid winners
+     * @since 0.1.0
+     */
+    List<Winner> markWinnersAsNonValid (List<UUID> winnersIds, UUID raffleId)
 }

@@ -7,7 +7,7 @@ import gql.ratpack.exec.Futures
 import graphql.schema.DataFetchingEnvironment
 
 import io.rafflethor.judge.twitter.TwitterJudge
-import io.rafflethor.participant.ParticipantRepository
+import io.rafflethor.participant.Repository as ParticipantRepository
 import io.rafflethor.eb.EventBusService
 
 /**
@@ -40,13 +40,13 @@ class ServiceImpl implements Service {
 
     @Override
     CompletableFuture<List<Winner>> pickWinners(DataFetchingEnvironment env) {
-        final Selectors.PickWinners params = Selectors.pickwinners(env)
+        final Selectors.PickWinners params = Selectors.pickWinners(env)
 
         return Futures
             .blocking({ params.id })
-            .thenApply(raffleRepository.&findById)
-            .thenApply(twitterJudge.&pickWinners) as CompletableFuture<List<Winner>>
-        }
+            .thenApply({ UUID raffleId -> raffleRepository.findById(raffleId, params.user) })
+            .thenApply(raffleRepository.&findAllWinners)
+    }
 
     @Override
     CompletableFuture<Raffle> save(DataFetchingEnvironment env) {
@@ -147,5 +147,14 @@ class ServiceImpl implements Service {
             .map({ String pay -> new JsonSlurper().parseText(pay) })
             .map({ Map json -> json.hashtag })
             .orElse(null)
+    }
+
+    @Override
+    CompletableFuture<List<Winner>> markWinnersAsNonValid(DataFetchingEnvironment env) {
+        Selectors.MarkWinnersAsNonValid params = Selectors.markWinnersAsNonValid(env)
+
+        return Futures.blocking({
+            raffleRepository.markWinnersAsNonValid(params.winnersIds, params.raffleId)
+        })
     }
 }

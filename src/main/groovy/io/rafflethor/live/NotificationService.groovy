@@ -74,17 +74,17 @@ class NotificationService implements Service {
             raffleRepository.markRaffleLive(raffle.id)
 
             log.info("countdown for ${raffle.id}")
-            executeCountdown()
+            executeCountdown(raffle.id)
 
             List<Map> winners = raffleRepository.findAllRandomWinners(raffle)
+            log.info("winners for ${raffle.id}")
 
-            log.info("winner for ${raffle.id}")
             eventBusService.publish(
-                id: new Date().time.toString(),
-                data: JsonOutput.toJson(
-                    data: winners?.hash ?: 'Rafflethor',
-                    type: 'winner'
-                )
+                id: raffle.id,
+                data: [
+                    winners: winners,
+                    type: 'winners'
+                ]
             )
 
             log.info("finishing ${raffle.id}")
@@ -92,11 +92,14 @@ class NotificationService implements Service {
         }
     }
 
-    void executeCountdown() {
+    void executeCountdown(UUID id) {
        (10..0).each { countdown ->
             eventBusService.publish(
-                id: new Date().time.toString(),
-                data: JsonOutput.toJson(data: countdown.toString(), type: 'countdown')
+                id: id,
+                data: [
+                    countdown: countdown,
+                    type: 'countdown'
+                ]
             )
             Thread.sleep(1000)
         }

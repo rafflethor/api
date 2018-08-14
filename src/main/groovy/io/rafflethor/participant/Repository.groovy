@@ -1,6 +1,6 @@
 package io.rafflethor.participant
 
-interface ParticipantRepository {
+interface Repository {
 
     /**
      * At the moment a given participant must provide an email
@@ -14,4 +14,20 @@ interface ParticipantRepository {
      * @since 0.1.0
      */
     Map<String,?> registerUser(UUID raffleId, String email)
+
+    /**
+     * Finds a given parti
+     * @param email
+     * @return
+     * @since 0.1.0
+     */
+    Map findParticipantByEmail(String email)
+
+    /**
+     * @param raffleId
+     * @param email
+     * @return
+     * @since 0.1.0
+     */
+    Map saveNewParticipant(UUID raffleId, String email)
 }

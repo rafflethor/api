@@ -68,6 +68,7 @@ class SchemaProvider implements Provider<GraphQLSchema> {
                     link('startRaffle', raffleService.&startRaffle)
                     link('deleteRaffle', raffleService.&delete)
                     link('updateRaffle', raffleService.&update)
+                    link('markWinnersAsNonValid', raffleService.&markWinnersAsNonValid)
                 }
             }
 

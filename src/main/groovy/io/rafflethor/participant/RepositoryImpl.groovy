@@ -4,25 +4,33 @@ import javax.inject.Inject
 import groovy.sql.Sql
 import java.security.MessageDigest
 
-class ParticipantRepositoryImpl implements ParticipantRepository {
+class RepositoryImpl implements Repository {
 
     @Inject
     Sql sql
 
     @Override
     Map<String,?> registerUser(UUID raffleId, String email) {
-        Optional<Map> participant = Optional
+        return Optional
             .ofNullable(email)
-            .map({ String mail -> sql.firstRow('SELECT * FROM participants WHERE email = ?', mail) })
+            .map(this.&findParticipantByEmail) // It should be byEmailAndRaffle
+            .orElse(saveNewParticipant(raffleId, email))
+    }
 
-        if (participant.isPresent()) {
-            return participant.get()
-        }
+    @Override
+    Map saveNewParticipant(UUID raffleId, String email) {
+        String query = '''
+          INSERT INTO participants
+            (id, email, hash, raffleId)
+          VALUES
+            (?, ?, ?, ?)
+        '''
 
         UUID uuid = UUID.randomUUID()
-        String hash = generateMD5(email ?: new Date().time.toString())
+        String hasheable = email ?: new Date().time.toString()
+        String hash = generateMD5(hasheable)
 
-        sql.executeInsert('INSERT INTO participants (id, email, hash, raffleId) VALUES (?, ?, ?, ?)',
+        sql.executeInsert(query,
                           uuid,
                           email,
                           hash,
@@ -36,7 +44,10 @@ class ParticipantRepositoryImpl implements ParticipantRepository {
         ]
     }
 
-
+    @Override
+    Map findParticipantByEmail(String email) {
+        return sql.firstRow('SELECT * FROM participants WHERE email = ?', email)
+    }
 
     String generateMD5(String s){
         MessageDigest

@@ -47,6 +47,7 @@ CREATE TABLE IF NOT EXISTS winners (
   participantId UUID NOT NULL REFERENCES participants (id),
   raffleId UUID NOT NULL REFERENCES raffles (id) ON DELETE CASCADE,
   ordering integer,
+  isValid boolean NOT NULL DEFAULT true,
   createdAt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 

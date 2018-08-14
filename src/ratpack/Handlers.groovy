@@ -5,6 +5,7 @@ import gql.ratpack.GraphQLHandler
 
 import io.rafflethor.cors.CorsHandler
 import io.rafflethor.live.LiveHandler
+import io.rafflethor.raffle.ManagementHandler
 import io.rafflethor.security.JwtTokenProviderHandler
 import io.rafflethor.security.JwtTokenCheckerHandler
 
@@ -23,6 +24,11 @@ ratpack {
 
         prefix('graphiql') {
             get('', GraphiQLHandler)
+        }
+
+        prefix('management/start') {
+            get(':id', JwtTokenCheckerHandler)
+            get(':id', ManagementHandler)
         }
 
         prefix('raffle') {
