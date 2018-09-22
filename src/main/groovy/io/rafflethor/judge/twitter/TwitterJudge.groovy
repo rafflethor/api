@@ -4,7 +4,7 @@ import javax.inject.Inject
 import java.time.LocalDate
 import groovy.util.logging.Slf4j
 
-import io.rafflethor.raffle.Judge
+import io.rafflethor.judge.Judge
 import io.rafflethor.raffle.Raffle
 import io.rafflethor.raffle.Winner
 import twitter4j.Query

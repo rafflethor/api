@@ -1,4 +1,7 @@
-package io.rafflethor.raffle
+package io.rafflethor.judge
+
+import io.rafflethor.raffle.Raffle
+import io.rafflethor.raffle.Winner
 
 /**
  * Represents an impartial judge who picks a set of winners
