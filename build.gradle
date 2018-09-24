@@ -25,7 +25,7 @@ docker {
     }
 
     javaApplication {
-        baseImage = 'openjdk:8-alpine'
+        baseImage = 'openjdk:8u171-alpine3.7'
         ports = [5050]
         tag = "rafflethor-docker-rafflethor.bintray.io/api:$version"
     }

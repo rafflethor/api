@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: rafflethor
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: apidb
+  namespace: rafflethor
+spec:
+  selector:
+    matchLabels:
+      app: rafflethor
+      tier: database
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: rafflethor
+        tier: database
+    spec:
+      containers:
+        - image: rafflethor-docker-rafflethor.bintray.io/db:1.0.1-alpine
+          name: apidb
+          ports:
+            - containerPort: 5432
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: apidb
+  namespace: rafflethor
+spec:
+  ports:
+  - port: 5432
+    targetPort: 5432
+    protocol: TCP
+  selector:
+    app: rafflethor
+    tier: database

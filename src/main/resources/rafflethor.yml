@@ -1,9 +1,9 @@
 app:
-  version: 0.1.0
+  version: 0.1.4
 
 database:
   driverClassName: org.postgresql.Driver
-  url: jdbc:postgresql://localhost:5432/rafflethor
+  url: jdbc:postgresql://apidb:5432/rafflethor
   username: "rafflethor"
   password: "rafflethor"
 
