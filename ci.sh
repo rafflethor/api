@@ -20,18 +20,13 @@
 
 set -o pipefail
 set -o errexit
-set -o nounset
+# set -o nounset
 
 # VARIABLES
 # =========
 
-K8S_CA_CRT=""
-K8S_USER_TOKEN=""
-
-if [ -f "${HOME}/ca.crt" ]; then
-    echo $K8S_CA_CRT | base64 --decode -i > ${HOME}/ca.crt
-    K8S_USER_TOKEN=$(echo $K8S_USER_TOKEN | base64 -d)
-fi
+echo $K8S_CA_CRT | base64 --decode -i > ${HOME}/ca.crt
+K8S_USER_TOKEN=$(echo $K8S_USER_TOKEN | base64 -d)
 
 # Docker variables to deploy Docker to a Docker repo
 DOCKER_VERSION="1.0.4"
