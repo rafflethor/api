@@ -23,10 +23,10 @@ branches:
     - master
 
 script:
-  - ./gradlew build publishApiImage -PdockerRegistryUsername=$DOCKER_REGISTRY_USERNAME -PdockerRegistryPassword=$DOCKER_REGISTRY_PASSWORD
+  - ./ci.sh docker
 
 deploy:
   provider: script
-  script: ci/deploy.sh
+  script: ./ci.sh deploy
   on:
     branch: master
