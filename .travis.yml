@@ -27,6 +27,6 @@ script:
 
 deploy:
   provider: script
-  script: ./ci.sh deploy
+  script: ./ci.sh update
   on:
     branch: master

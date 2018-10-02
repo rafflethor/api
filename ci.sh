@@ -88,7 +88,7 @@ function update {
     # Updates the current deployment with the next avaiable Docker image
     set_credentials
 
-    kubectl set image deployment/api -n $K8S_CONTEXT_NAME adminpanel=$DOCKER_IMAGE
+    kubectl set image deployment/api -n $K8S_CONTEXT_NAME api=$DOCKER_IMAGE
 
     trap cleanup EXIT
 }
