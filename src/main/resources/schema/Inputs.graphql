@@ -38,3 +38,8 @@ input MarkWinnersAsNonValidInput {
   raffleId: String!
   winnersIds: [String]!
 }
+
+type SpotAssociationResult {
+  id: String
+  raffleId: String
+}

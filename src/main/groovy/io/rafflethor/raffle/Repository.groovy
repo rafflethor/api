@@ -136,5 +136,16 @@ interface Repository {
      * @return a list of the non valid winners
      * @since 0.1.0
      */
-    List<Winner> markWinnersAsNonValid (List<UUID> winnersIds, UUID raffleId)
+    List<Winner> markWinnersAsNonValid(List<UUID> winnersIds, UUID raffleId)
+
+    /**
+     * Assigns an empty spot to an existent raffle
+     *
+     * @param spotId the spot id
+     * @param raffleId the raffle we want to assign
+     * @param returns the spot and the raffle id in case they have been assigned
+     * empty map otherwise
+     * @since 1.0.5
+     */
+    Map assignSpot(String spotId, UUID raffleId)
 }

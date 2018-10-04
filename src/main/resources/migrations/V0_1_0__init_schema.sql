@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS raffles (
 );
 
 CREATE TABLE IF NOT EXISTS raffle_spot (
-  id varchar(4) NOT NULL,
+  id varchar(4) NOT NULL PRIMARY KEY,
   raffleId UUID NOT NULL REFERENCES raffles (id) ON DELETE CASCADE
 );
 

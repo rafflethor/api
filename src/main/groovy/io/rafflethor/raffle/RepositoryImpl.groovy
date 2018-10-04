@@ -296,4 +296,25 @@ class RepositoryImpl implements Repository {
 
         return new Winner(row.subMap(fields))
     }
+
+    @Override
+    Map assignSpot(String spotId, UUID raffleId) {
+        String query = '''
+          INSERT INTO raffle_spot
+            (id,
+             raffleId)
+          VALUES
+            (:id,
+             :raffleId)
+          ON CONFLICT (id) DO UPDATE SET
+             raffleId = :raffleId
+          RETURNING id, raffleId
+        '''
+
+        def (String spot, UUID raffle) = sql
+            .executeInsert(query, [id: spotId, raffleId: raffleId])
+            .find()
+
+        return [id: spot, raffleId: raffle]
+    }
 }

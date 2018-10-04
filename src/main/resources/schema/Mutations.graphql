@@ -24,4 +24,6 @@ type Mutations {
 
   # Marks some winners as invalid
   markWinnersAsNonValid(input: MarkWinnersAsNonValidInput!): [Winner]
+
+  assignSpot(spotId: String!, raffleId: String!): SpotAssociationResult
 }

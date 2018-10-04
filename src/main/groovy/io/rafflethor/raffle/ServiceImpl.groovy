@@ -157,4 +157,13 @@ class ServiceImpl implements Service {
             raffleRepository.markWinnersAsNonValid(params.winnersIds, params.raffleId)
         })
     }
+
+    @Override
+    CompletableFuture<Map> assignSpot(DataFetchingEnvironment env) {
+        Selectors.AssignSpot params = Selectors.assignSpot(env)
+
+        return Futures.blocking({
+            raffleRepository.assignSpot(params.id, params.raffleId)
+        })
+    }
 }
