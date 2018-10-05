@@ -1,16 +1,18 @@
 INSERT INTO users
-  (id, username, password)
+  (id, username, password, roles)
 VALUES
   ('e8bceac0-905c-11e8-9eb6-529269fb1459',
    'organizer1@email.com',
-   '3ee1ef7de89c0e5117bc9e40984f1f0ac23819c830cc7a2ee8f8597effdf7cad');
+   '3ee1ef7de89c0e5117bc9e40984f1f0ac23819c830cc7a2ee8f8597effdf7cad',
+   '{"USER"}');
 
 INSERT INTO users
-  (id, username, password)
+  (id, username, password, roles)
 VALUES
   ('e8bced86-905c-11e8-9eb6-529269fb1459',
    'organizer2@email.com',
-   '89379660c99d2939fafb6b708cd461f80a0eca8d025aa991a96d5559d8247d6e');
+   '89379660c99d2939fafb6b708cd461f80a0eca8d025aa991a96d5559d8247d6e',
+   '{"USER"}');
 
 INSERT INTO organizations
   (id, name, description, createdBy)

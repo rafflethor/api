@@ -1,5 +1,5 @@
 app:
-  version: 0.1.4
+  version: 0.1.6
 
 database:
   driverClassName: org.postgresql.Driver
@@ -16,9 +16,19 @@ flyway:
 security:
   secret: 12345678901234567890123456789012
   algorithm: HMAC256
-
-twitter:
-  consumerKey:
-  consumerSecret:
-  accessToken:
-  accessTokenSecret:
+  authorization:
+    schema: true
+    allowPartials: true
+    mappings:
+      /login: ANONYMOUS
+      /eventRegistry: ANONYMOUS
+      /checkRaffleResult: ANONYMOUS
+      /organization: USER
+      /raffle: USER
+      /pickWinners: USER
+      /list*: USER
+      /save*: USER
+      /delete*: USER
+      /startRaffle: USER
+      /markWinnerAsNonValid: USER
+      /assignSpot: USER

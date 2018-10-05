@@ -130,7 +130,7 @@ class RepositoryImpl implements Repository {
 
         return Optional
             .ofNullable(uuid)
-            .map(this.&findById)
+            .map(this.&findByIdUnsecured)
             .orElse(null)
     }
 
@@ -197,7 +197,7 @@ class RepositoryImpl implements Repository {
         List<Map> winners = sql.rows("""
           SELECT
             p.hash,
-            p.email
+            p.social
           FROM winners w JOIN participants p ON
             w.participantId = p.id
           WHERE w.raffleId = ?

@@ -64,7 +64,7 @@ class ServiceImpl implements Service {
         return Futures.blocking({ params.spotId })
             .thenApply(raffleRepository.&findRaffleFromSpot)
             .thenApply({ Raffle raffle ->
-               processRegistration(raffle, params.spotId, params.email)
+                processRegistration(raffle, params.spotId, params.email)
             })
     }
 

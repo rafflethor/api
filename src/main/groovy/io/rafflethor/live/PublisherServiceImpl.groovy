@@ -10,7 +10,9 @@ import ratpack.rx.RxRatpack
 import ratpack.handling.Context
 import ratpack.stream.Streams
 import io.rafflethor.eb.EventBusService
+import groovy.util.logging.Slf4j
 
+@Slf4j
 class PublisherServiceImpl implements PublisherService {
 
     @Inject
@@ -18,7 +20,7 @@ class PublisherServiceImpl implements PublisherService {
 
     @Override
     Publisher<Map> registerPublisher(Context context, String raffleId, String userHash) {
-        println "registering publisher for raffleId: $raffleId and userHash: $userHash"
+        log.debug "registering publisher for raffleId: $raffleId and userHash: $userHash"
 
         Publisher<Map> stream = RxRatpack
             .publisher(eventBusService.create())

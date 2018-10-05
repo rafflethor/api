@@ -2,6 +2,7 @@ package io.rafflethor.security
 
 import com.google.inject.AbstractModule
 import com.google.inject.Scopes
+import graphql.execution.instrumentation.Instrumentation
 
 class Module extends AbstractModule {
     @Override
@@ -12,5 +13,6 @@ class Module extends AbstractModule {
         bind(Repository).to(RepositoryImpl).in(Scopes.SINGLETON)
         bind(JwtTokenProviderHandler).in(Scopes.SINGLETON)
         bind(JwtTokenCheckerHandler).in(Scopes.SINGLETON)
+        bind(Instrumentation).toProvider(InstrumentationProvider).in(Scopes.SINGLETON)
     }
 }

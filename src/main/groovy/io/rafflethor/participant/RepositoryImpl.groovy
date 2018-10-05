@@ -10,43 +10,43 @@ class RepositoryImpl implements Repository {
     Sql sql
 
     @Override
-    Map<String,?> registerUser(UUID raffleId, String email) {
+    Map<String,?> registerUser(UUID raffleId, String social) {
         return Optional
-            .ofNullable(email)
-            .map(this.&findParticipantByEmail) // It should be byEmailAndRaffle
-            .orElse(saveNewParticipant(raffleId, email))
+            .ofNullable(social)
+            .map(this.&findParticipantBySocial)
+            .orElse(saveNewParticipant(raffleId, social))
     }
 
     @Override
-    Map saveNewParticipant(UUID raffleId, String email) {
+    Map saveNewParticipant(UUID raffleId, String social) {
         String query = '''
           INSERT INTO participants
-            (id, email, hash, raffleId)
+            (id, social, hash, raffleId)
           VALUES
             (?, ?, ?, ?)
         '''
 
         UUID uuid = UUID.randomUUID()
-        String hasheable = email ?: new Date().time.toString()
+        String hasheable = social ?: new Date().time.toString()
         String hash = generateMD5(hasheable)
 
         sql.executeInsert(query,
                           uuid,
-                          email,
+                          social,
                           hash,
                           raffleId)
 
         return [
             id: uuid,
-            email: email,
+            social: social,
             hash: hash,
             raffleId: raffleId
         ]
     }
 
     @Override
-    Map findParticipantByEmail(String email) {
-        return sql.firstRow('SELECT * FROM participants WHERE email = ?', email)
+    Map findParticipantBySocial(String social) {
+        return sql.firstRow('SELECT * FROM participants WHERE social = ?', social)
     }
 
     String generateMD5(String s){

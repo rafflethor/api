@@ -50,7 +50,7 @@ class RepositoryImpl implements Repository {
     User findByUsername(String username) {
         String query = '''
           SELECT
-            id, username
+            id, username, roles
           FROM
             users
           WHERE
@@ -66,6 +66,8 @@ class RepositoryImpl implements Repository {
     }
 
     User mapToUser(Map user) {
-        return new User(id: user.id, username: user.username)
+        Set roles = user.roles?.array as Set
+
+        return new User(id: user.id, username: user.username, roles: roles)
     }
 }

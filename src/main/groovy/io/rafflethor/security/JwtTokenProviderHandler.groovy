@@ -8,6 +8,12 @@ import ratpack.form.Form
 import ratpack.handling.Handler
 import ratpack.handling.Context
 
+/**
+ * Handler responsible for providing a new token for a valid
+ * authenticated user
+ *
+ * @since 1.0.6
+ */
 class JwtTokenProviderHandler implements Handler {
 
     @Inject

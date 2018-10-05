@@ -67,7 +67,7 @@ class NotificationService implements Service {
 
     void handleIt(event) {
         Raffle raffle = raffleRepository.findWaitingRaffle()
-        log.info("checking if there is any raffle to start...")
+        log.debug("checking if there is any raffle to start...")
 
         if (raffle) {
             log.info("executing raffle ${raffle.id}")

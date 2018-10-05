@@ -8,26 +8,26 @@ interface Repository {
      * unique id to participate in the raffle.
      *
      * @param raffleId id of the raffle
-     * @param email email used to register the participant
+     * @param social social used to register the participant
      * @return the registration information required to participate
      * in the raffle
      * @since 0.1.0
      */
-    Map<String,?> registerUser(UUID raffleId, String email)
+    Map<String,?> registerUser(UUID raffleId, String social)
 
     /**
      * Finds a given parti
-     * @param email
+     * @param social
      * @return
      * @since 0.1.0
      */
-    Map findParticipantByEmail(String email)
+    Map findParticipantBySocial(String social)
 
     /**
      * @param raffleId
-     * @param email
+     * @param social
      * @return
      * @since 0.1.0
      */
-    Map saveNewParticipant(UUID raffleId, String email)
+    Map saveNewParticipant(UUID raffleId, String social)
 }

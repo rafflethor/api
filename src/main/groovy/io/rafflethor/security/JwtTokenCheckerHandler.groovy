@@ -10,12 +10,15 @@ import ratpack.registry.Registry
 import com.auth0.jwt.interfaces.DecodedJWT
 
 /**
- * @since 0.1.0
+ * Handler responsible for adding an authenticated user credentials in
+ * {@link Context} if there're any
+ *
+ * @since 1.0.6
  */
 public class JwtTokenCheckerHandler implements Handler {
 
     /**
-     * @since 0.1.0
+     * @since 1.0.6
      */
     @Inject
     CryptoService cryptoService
@@ -40,10 +43,9 @@ public class JwtTokenCheckerHandler implements Handler {
 
         if (user.isPresent()) {
             ctx.request.add(user.get())
-            ctx.next()
-        } else {
-            ctx.render(json(buildAuthErrorMessage()))
         }
+
+        ctx.next()
     }
 
     private DecodedJWT verify(String token) {

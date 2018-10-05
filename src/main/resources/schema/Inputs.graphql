@@ -21,7 +21,7 @@ input SaveRaffleInput {
 type RaffleRegistration {
   hash: String
   raffleId: String,
-  email: String
+  social: String
 }
 
 type RaffleResult {
