@@ -23,7 +23,7 @@ VALUES
    'e8bceac0-905c-11e8-9eb6-529269fb1459');
 
 INSERT INTO raffles
-  (id, name, type, status, preventPreviousWinners, noWinners, since, until, organizationId, createdBy)
+  (id, name, type, status, preventPreviousWinners, noWinners, since, until, payload, organizationId, createdBy)
 VALUES
   ('cc00c00e-6a42-11e8-adc0-fa7ae01bbebc',
    'SuperUnconference T-Shirt',
@@ -33,6 +33,7 @@ VALUES
    1,
    '2018/05/31',
    '2018/06/06',
+   '{"code": "madridgug_groovy3"}',
    '135ef3e0-7c49-11e8-adc0-fa7ae01bbebc',
    'e8bceac0-905c-11e8-9eb6-529269fb1459');
 
@@ -50,16 +51,6 @@ VALUES
    '{"hashtag": "#piweek14"}',
    '135ef3e0-7c49-11e8-adc0-fa7ae01bbebc',
    'e8bceac0-905c-11e8-9eb6-529269fb1459');
-
-INSERT INTO raffle_spot
-    (id, raffleId)
-VALUES
-    ('AAAA', 'cc00c2ac-6a42-11e8-adc0-fa7ae01bbebc');
-
-INSERT INTO raffle_spot
-    (id, raffleId)
-VALUES
-    ('BBBB', 'cc00c00e-6a42-11e8-adc0-fa7ae01bbebc');
 
 INSERT INTO participants
   (id, social, hash, nick, raffleId)

@@ -105,11 +105,6 @@ class Selectors {
         UUID raffleId
     }
 
-    static class AssignSpot {
-        String id
-        UUID raffleId
-    }
-
     /**
      * Gathers max and offset from {@link DataFetchingEnvironment} parameter
      *
@@ -223,12 +218,5 @@ class Selectors {
             .collect(UUID.&fromString) as List<UUID>
 
         return new MarkWinnersAsNonValid(winnersIds: winnersIds, raffleId: raffleId)
-    }
-
-    static AssignSpot assignSpot(DataFetchingEnvironment env) {
-        UUID raffleId = UUID.fromString(env.arguments.raffleId)
-        String spotId = env.arguments.spotId
-
-        return new AssignSpot(id: spotId, raffleId: raffleId)
     }
 }

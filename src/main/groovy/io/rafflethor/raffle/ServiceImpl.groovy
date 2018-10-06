@@ -62,7 +62,7 @@ class ServiceImpl implements Service {
         final Selectors.Registration params = Selectors.registration(env)
 
         return Futures.blocking({ params.spotId })
-            .thenApply(raffleRepository.&findRaffleFromSpot)
+            .thenApply(raffleRepository.&findLiveRaffleFromCode)
             .thenApply({ Raffle raffle ->
                 processRegistration(raffle, params.spotId, params.email)
             })
@@ -159,11 +159,13 @@ class ServiceImpl implements Service {
     }
 
     @Override
-    CompletableFuture<Map> assignSpot(DataFetchingEnvironment env) {
-        Selectors.AssignSpot params = Selectors.assignSpot(env)
+    String extractCode(DataFetchingEnvironment env) {
+        Raffle raffle = env.source as Raffle
 
-        return Futures.blocking({
-            raffleRepository.assignSpot(params.id, params.raffleId)
-        })
+        return Optional
+            .ofNullable(raffle.payload)
+            .map({ String pay -> new JsonSlurper().parseText(pay) })
+            .map({ Map json -> json.code })
+            .orElse(null)
     }
 }

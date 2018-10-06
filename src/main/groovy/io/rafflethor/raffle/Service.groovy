@@ -121,11 +121,11 @@ interface Service {
     CompletableFuture<List<Winner>> markWinnersAsNonValid(DataFetchingEnvironment env)
 
     /**
-     * Assigns an empty spot the indicated raffle
+     * Extracts the participation code from a live {@link Raffle}
      *
      * @param env data execution environment
-     * @return a map with the raffle id and the spot id
-     * @since 1.0.5
+     * @return the participation code found in the payload map
+     * @since 1.0.7
      */
-    CompletableFuture<Map> assignSpot(DataFetchingEnvironment env)
+    String extractCode(DataFetchingEnvironment env)
 }

@@ -123,9 +123,9 @@ class RepositoryImpl implements Repository {
     }
 
     @Override
-    Raffle findRaffleFromSpot(String spotId) {
+    Raffle findLiveRaffleFromCode(String code) {
         UUID uuid = sql
-            .firstRow("SELECT raffleId  as id FROM raffle_spot WHERE id = ?", spotId)
+            .firstRow("SELECT raffleId  as id FROM raffle WHERE payload->>'code' = ?", code)
             .id
 
         return Optional
@@ -295,26 +295,5 @@ class RepositoryImpl implements Repository {
         ]
 
         return new Winner(row.subMap(fields))
-    }
-
-    @Override
-    Map assignSpot(String spotId, UUID raffleId) {
-        String query = '''
-          INSERT INTO raffle_spot
-            (id,
-             raffleId)
-          VALUES
-            (:id,
-             :raffleId)
-          ON CONFLICT (id) DO UPDATE SET
-             raffleId = :raffleId
-          RETURNING id, raffleId
-        '''
-
-        def (String spot, UUID raffle) = sql
-            .executeInsert(query, [id: spotId, raffleId: raffleId])
-            .find()
-
-        return [id: spot, raffleId: raffle]
     }
 }

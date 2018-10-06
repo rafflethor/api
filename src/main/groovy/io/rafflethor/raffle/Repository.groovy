@@ -30,13 +30,13 @@ interface Repository {
     Raffle findById(UUID id, User user)
 
     /**
-     * Finds a given {@link Raffle} by the spot assigned to it
+     * Finds a given {@link Raffle} of type LIVE by the code assigned to it
      *
-     * @param spotId the spot used by the {@link Raffle} we would like to get
-     * @return the {@link Raffle} using the spot id passed as argument
+     * @param code the code used by the {@link Raffle} we would like to get
+     * @return the {@link Raffle} using the code id passed as argument
      * @since 0.1.0
      */
-    Raffle findRaffleFromSpot(String spotId)
+    Raffle findLiveRaffleFromCode(String code)
 
     /**
      * Saves or updates a given {@link Raffle}
@@ -137,15 +137,4 @@ interface Repository {
      * @since 0.1.0
      */
     List<Winner> markWinnersAsNonValid(List<UUID> winnersIds, UUID raffleId)
-
-    /**
-     * Assigns an empty spot to an existent raffle
-     *
-     * @param spotId the spot id
-     * @param raffleId the raffle we want to assign
-     * @param returns the spot and the raffle id in case they have been assigned
-     * empty map otherwise
-     * @since 1.0.5
-     */
-    Map assignSpot(String spotId, UUID raffleId)
 }
