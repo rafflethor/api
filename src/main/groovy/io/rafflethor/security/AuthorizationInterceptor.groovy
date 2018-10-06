@@ -43,7 +43,7 @@ class AuthorizationInterceptor extends NoOpInstrumentation {
 
     @Override
     DataFetcher<?> instrumentDataFetcher(DataFetcher<?> dataFetcher, InstrumentationFieldFetchParameters params) {
-        log.info('instrumenting DataFetcher to check authorization')
+        log.debug('instrumenting DataFetcher to check authorization')
 
         Context context = params.environment.context as Context
         ExecutionTypeInfo typeInfo = params.typeInfo

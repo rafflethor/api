@@ -51,7 +51,7 @@ class AuthorizationService {
             .map(AuthorizationService.&checkConstraints.rcurry(user.roles as Set))
             .orElse(false)
 
-        log.debug "Is the user ${user.username} allowed to use the path $path ? ==> $isAllowed"
+        log.debug "{\"user\": \"${user.username}\", \"path\": \"$path\"}"
 
         return isAllowed
     }

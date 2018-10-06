@@ -28,6 +28,7 @@ security:
       /pickWinners: USER
       /list*: USER
       /save*: USER
+      /update*: USER
       /delete*: USER
       /startRaffle: USER
       /markWinnerAsNonValid: USER

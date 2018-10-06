@@ -3,6 +3,7 @@ package io.rafflethor.raffle
 import javax.inject.Inject
 import java.util.concurrent.CompletableFuture
 import groovy.json.JsonSlurper
+import groovy.util.logging.Slf4j
 import gql.ratpack.exec.Futures
 import graphql.schema.DataFetchingEnvironment
 
@@ -15,6 +16,7 @@ import io.rafflethor.eb.EventBusService
  *
  * @since 0.1.0
  */
+@Slf4j
 class ServiceImpl implements Service {
 
     @Inject
@@ -61,20 +63,22 @@ class ServiceImpl implements Service {
     CompletableFuture<Map> raffleRegistration(DataFetchingEnvironment env) {
         final Selectors.Registration params = Selectors.registration(env)
 
-        return Futures.blocking({ params.spotId })
+        return Futures.blocking({ params.code })
             .thenApply(raffleRepository.&findLiveRaffleFromCode)
             .thenApply({ Raffle raffle ->
-                processRegistration(raffle, params.spotId, params.email)
+                processRegistration(raffle, params.social)
             })
     }
 
-    private Map processRegistration(Raffle raffle, String spotId, String email) {
+    private Map processRegistration(Raffle raffle, String social) {
+        log.info "{\"registration\": \"${raffle.type}\"}"
+
         return Optional
             .ofNullable(raffle)
             .map({ Raffle raff ->
                 switch (raff.type) {
-                  case 'TWITTER': return participantRepository.registerUser(raff.id, email)
-                  case 'LIVE': return processLiveRegistration(raff, email)
+                  case 'TWITTER': return participantRepository.registerUser(raff.id, social)
+                  case 'LIVE': return processLiveRegistration(raff, social)
                 }
         }).orElse([:])
     }

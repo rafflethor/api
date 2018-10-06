@@ -145,12 +145,12 @@ class Selectors {
     }
 
     static Registration registration(DataFetchingEnvironment env) {
-        final String spotId = env.arguments.spotId as String
-        final String email = env.arguments.email as String
+        final String code = env.arguments.code as String
+        final String social = env.arguments.social as String
 
         return new Registration(
-            spotId: spotId,
-            email: email
+            code: code,
+            social: social
         )
     }
 

@@ -11,7 +11,7 @@ type Mutations {
 
   # registers a given user with its email to a given raffle.
   # The service will return a unique participation hash
-  eventRegistry(spotId: String, email: String): RaffleRegistration
+  eventRegistry(code: String, social: String): RaffleRegistration
 
   # Starts a given raffle
   startRaffle(id: String!): Raffle
@@ -24,6 +24,4 @@ type Mutations {
 
   # Marks some winners as invalid
   markWinnersAsNonValid(input: MarkWinnersAsNonValidInput!): [Winner]
-
-  assignSpot(spotId: String!, raffleId: String!): SpotAssociationResult
 }
