@@ -29,7 +29,7 @@ class RepositoryImpl implements Repository {
     User login(String username, String password) {
         String query = '''
       SELECT
-        id, username
+        id, username, roles
       FROM
         users
       WHERE
