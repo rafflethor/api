@@ -31,5 +31,5 @@ security:
       /update*: USER
       /delete*: USER
       /startRaffle: USER
-      /markWinnerAsNonValid: USER
+      /markWinnersAsNonValid: USER
       /assignSpot: USER

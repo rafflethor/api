@@ -31,7 +31,7 @@ ratpack {
             get(':id', ManagementHandler)
         }
 
-        prefix('raffle') {
+        prefix('raffles') {
             get('/:id/:hash', LiveHandler)
         }
     }

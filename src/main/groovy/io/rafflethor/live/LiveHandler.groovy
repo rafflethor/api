@@ -2,6 +2,7 @@ package io.rafflethor.live
 
 import static ratpack.sse.ServerSentEvents.serverSentEvents
 
+import groovy.json.JsonOutput
 import javax.inject.Inject
 import org.reactivestreams.Publisher
 import ratpack.sse.Event
@@ -33,8 +34,8 @@ class LiveHandler implements Handler {
 
         ctx.render(serverSentEvents(publisher, { Event event ->
             return event
-                .data({ Map payload -> payload.data })
-                .id({ Map payload -> payload.id})
+                .data({ Map payload -> JsonOutput.toJson(payload.data) })
+                .id({ Map payload -> payload?.id?.toString() })
         }))
     }
 }
