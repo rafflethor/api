@@ -47,8 +47,8 @@ class Selectors {
      */
     @Immutable
     static class Registration {
-        String spotId
-        String email
+        String code
+        String social
     }
 
     /**
