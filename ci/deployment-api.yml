@@ -21,7 +21,7 @@ spec:
         tier: api
     spec:
       containers:
-      - image: rafflethor-docker-rafflethor.bintray.io/api:1.0.10
+      - image: rafflethor-docker-rafflethor.bintray.io/api:1.0.11
         name: api
         ports:
         - containerPort: 5050

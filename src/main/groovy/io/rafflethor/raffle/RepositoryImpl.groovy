@@ -125,7 +125,7 @@ class RepositoryImpl implements Repository {
     @Override
     Raffle findLiveRaffleFromCode(String code) {
         UUID uuid = sql
-            .firstRow("SELECT raffleId  as id FROM raffle WHERE payload->>'code' = ?", code)
+            .firstRow("SELECT id FROM raffles WHERE payload->>'code' = ?", code)
             .id
 
         return Optional
