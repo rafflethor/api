@@ -115,6 +115,9 @@ type Winner {
   # which is its position in the raffle
   ordering: Int
 
+  # hash
+  hash: String
+
   # Nickname to identify the winner
   nick: String
 

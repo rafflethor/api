@@ -162,14 +162,15 @@ class RepositoryImpl implements Repository {
 
     List<Map> saveWinners(Raffle raffle, List<Map> participants) {
         sql.withTransaction {
-            participants.each { p ->
+            participants.eachWithIndex { p, index ->
                 UUID uuid = Utils.generateUUID()
 
                 sql.executeInsert(
-                    "INSERT INTO winners (id, participantId, raffleId) VALUES (?, ?, ?)",
+                    "INSERT INTO winners (id, participantId, raffleId, ordering) VALUES (?, ?, ?, ?)",
                     uuid,
                     p.id,
-                    p.raffleId)
+                    p.raffleId,
+                    index)
             }
         }
 
@@ -196,11 +197,15 @@ class RepositoryImpl implements Repository {
         Raffle raffle = findByIdUnsecured(id)
         List<Map> winners = sql.rows("""
           SELECT
+            w.id,
+            w.ordering,
             p.hash,
             p.social
           FROM winners w JOIN participants p ON
             w.participantId = p.id
-          WHERE w.raffleId = ?
+          WHERE
+            w.raffleId = ? AND
+            w.isValid = true
         """, id)
 
         Boolean didIWin = userHash in winners*.hash
