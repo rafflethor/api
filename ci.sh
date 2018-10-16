@@ -38,7 +38,7 @@ BINTRAY_REPO="rafflethor-docker-rafflethor.bintray.io"
 
 # Usage
 function usage {
-    echo "./ci.sh build|docker|deploy|udpate|delete"
+    echo "./ci.sh build|docker|udpate"
 }
 
 # Removes the certificate from ci machine
@@ -72,35 +72,12 @@ function build_image {
         -PdockerRegistryPassword=$DOCKER_REGISTRY_PASSWORD
 }
 
-# deploys the app to k8s
-function deploy {
-    # If deployment hasn't been deployed yet this is the command to use to
-    # deploy it for the first time
-    set_credentials
-
-    kubectl apply -f ci/deployment-api.yml -n $K8S_CONTEXT_NAME
-
-    trap cleanup EXIT
-}
-
 # updates k8s deployment image
 function update {
     # Updates the current deployment with the next avaiable Docker image
     set_credentials
 
     kubectl set image deployment/api -n $K8S_CONTEXT_NAME api=$DOCKER_IMAGE
-
-    trap cleanup EXIT
-}
-
-# deletes k8s deployment
-function delete {
-    # Deletes all k8s artifacts for this app
-    set_credentials
-
-    kubectl delete ingress/api -n $K8S_CONTEXT_NAME
-    kubectl delete service/api -n $K8S_CONTEXT_NAME
-    kubectl delete deploy/api -n $K8S_CONTEXT_NAME
 
     trap cleanup EXIT
 }
@@ -117,14 +94,8 @@ if (( $# > 0 )); then
         docker)
             build_image
             ;;
-        deploy)
-            deploy
-            ;;
         update)
             update
-            ;;
-        delete)
-            delete
             ;;
         *)
             usage
