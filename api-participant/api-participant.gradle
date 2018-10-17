@@ -1,0 +1,15 @@
+plugins {
+    id 'groovy'
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile "org.codehaus.groovy:groovy:2.4.15"
+    compile "org.codehaus.groovy:groovy-sql:2.4.15"
+    compile "com.google.inject:guice:4.0"
+
+    testCompile "org.spockframework:spock-core:1.1-groovy-2.4"
+}

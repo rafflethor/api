@@ -1,2 +1,16 @@
+include 'api-migration'
+include 'api'
+include 'api-model'
+include 'api-organization'
+include 'api-participant'
+include 'api-raffle'
+include 'api-eventbus'
+include 'api-ratpack'
+include 'api-db'
+
 rootProject.name = 'api'
 
+rootProject.children.each { project ->
+    project.buildFileName = "${project.name}.gradle"
+    assert project.buildFile.isFile()
+}

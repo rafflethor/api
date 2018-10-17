@@ -29,7 +29,7 @@ echo $K8S_CA_CRT | base64 --decode -i > ${HOME}/ca.crt
 K8S_USER_TOKEN=$(echo $K8S_USER_TOKEN | base64 -d)
 
 # Docker variables to deploy Docker to a Docker repo
-DOCKER_VERSION="1.0.12"
+DOCKER_VERSION="1.0.13"
 DOCKER_IMAGE="rafflethor-docker-rafflethor.bintray.io/api:${DOCKER_VERSION}"
 BINTRAY_REPO="rafflethor-docker-rafflethor.bintray.io"
 
@@ -60,14 +60,14 @@ function set_credentials {
 
 # builds only the code passing tests
 function build {
-    ./gradlew clean build
+    ./gradlew clean :api:build
 }
 
 # builds the code and pushes docker image to bintray
 function build_image {
     ./gradlew \
-        build \
-        publishApiImage \
+        :api:build \
+        :api:publishApiImage \
         -PdockerRegistryUsername=$DOCKER_REGISTRY_USERNAME \
         -PdockerRegistryPassword=$DOCKER_REGISTRY_PASSWORD
 }
